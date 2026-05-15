@@ -2,10 +2,17 @@
   "name": "erp_cnvs",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "postinstall": "prisma generate",
+    "start": "node server.js",
+    "cpanel:migrate": "prisma migrate deploy",
+    "cpanel:seed": "prisma db seed",
+    "cpanel:deploy": "npm run cpanel:migrate",
     "lint": "eslint"
   },
   "prisma": {
@@ -16,6 +23,7 @@
     "@prisma/client": "^6.19.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.105.4",
+    "@tailwindcss/postcss": "^4",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -34,20 +42,19 @@
     "shadcn": "^4.7.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4",
+    "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.20.0",
     "tw-animate-css": "^1.4.0",
+    "typescript": "^5",
     "zustand": "^5.0.13"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.6",
-    "tailwindcss": "^4",
-    "tailwindcss-animate": "^1.0.7",
-    "tsx": "^4.20.0",
-    "typescript": "^5"
+    "eslint-config-next": "16.2.6"
   }
 }

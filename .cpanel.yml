@@ -1,0 +1,14 @@
+---
+# Hook otomatis setelah Git pull di cPanel.
+# Sesuaikan path NODE_BIN dan DEPLOY_ROOT dengan akun Anda.
+# Lihat DEPLOY-CPANEL.md untuk langkah lengkap.
+deployment:
+  tasks:
+    - export DEPLOY_ROOT=/home/USERNAME/apps/erp_cnvs
+    - export NODE_BIN=/home/USERNAME/nodevenv/apps/erp_cnvs/20/bin
+    - export PATH=$NODE_BIN:$PATH
+    - cd $DEPLOY_ROOT
+    - npm install
+    - npx prisma migrate deploy
+    # Build di shared hosting sering gagal (EAGAIN). Uncomment hanya jika resource server cukup:
+    # - npm run build
