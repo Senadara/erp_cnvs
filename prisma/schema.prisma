@@ -1,0 +1,291 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  OWNER
+  STAFF
+  MITRA
+}
+
+enum DisplayGroupContext {
+  PRODUCT
+  STOCK
+}
+
+// ═══ Outlet (Multi-Outlet Support) ═══
+model Outlet {
+  id          String        @id @default(cuid())
+  name        String
+  address     String?
+  phone       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  stocks      StockItem[]
+  transactions Transaction[]
+  pettyCashes PettyCash[]
+  wasteLogs    WasteLog[]
+  shiftRecords ShiftRecord[]
+  restockLogs  RestockLog[]
+  userOutlets UserOutlet[]
+  displayGroups DisplayGroup[]
+  products      Product[]
+
+  @@map("outlets")
+}
+
+model User {
+  id               String               @id @default(cuid())
+  email            String               @unique
+  passwordHash     String               @map("password_hash")
+  displayName      String               @map("display_name")
+  role             UserRole
+  isActive         Boolean              @default(true) @map("is_active")
+  /** STAFF: override fitur default, contoh { "owner": true, "cashier": false } */
+  featureOverrides Json?                @map("feature_overrides")
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  outlets          UserOutlet[]
+  mitraProducts    MitraProductScope[]
+  mitraStocks      MitraStockScope[]
+
+  @@map("users")
+}
+
+model UserOutlet {
+  userId   String
+  outletId String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outlet   Outlet @relation(fields: [outletId], references: [id], onDelete: Cascade)
+
+  @@id([userId, outletId])
+  @@map("user_outlets")
+}
+
+model MitraProductScope {
+  userId    String
+  productId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([userId, productId])
+  @@map("mitra_product_scopes")
+}
+
+model MitraStockScope {
+  userId      String
+  stockItemId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stockItem   StockItem @relation(fields: [stockItemId], references: [id], onDelete: Cascade)
+
+  @@id([userId, stockItemId])
+  @@map("mitra_stock_scopes")
+}
+
+model DisplayGroup {
+  id        String               @id @default(cuid())
+  name      String
+  sortOrder Int                  @default(0) @map("sort_order")
+  context   DisplayGroupContext
+  /** STOCK & PRODUCT: wajib outlet (menu/katalog per cabang). */
+  outletId  String?              @map("outlet_id")
+  outlet    Outlet?              @relation(fields: [outletId], references: [id], onDelete: Cascade)
+  products  Product[]
+  stocks    StockItem[]
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  @@index([context, outletId])
+  @@map("display_groups")
+}
+
+// ═══ Supplier ═══
+model Supplier {
+  id        String      @id @default(cuid())
+  name      String
+  phone     String?
+  address   String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  stocks    StockItem[]
+
+  @@map("suppliers")
+}
+
+// ═══ Stock Item (dalam satuan BIJI/Unit/Gram) ═══
+model StockItem {
+  id            String       @id @default(cuid())
+  outletId      String       @map("outlet_id")
+  name          String
+  currentStock  Decimal      @default(0) @map("current_stock_biji")
+  unitName      String       @default("biji") @map("unit_name")
+  minStockAlert Decimal      @default(0) @map("min_stock_alert")
+  supplierId    String?      @map("supplier_id")
+  /** false = bahan seperti saus: tidak dipakai untuk batas jual & tidak dikurangi otomatis dari kasir */
+  trackable     Boolean      @default(true) @map("trackable")
+  /** BIJI = hitung per unit fisik; PORSI = tampilan setara porsi (informasi UX) */
+  countingBasis String       @default("BIJI") @map("counting_basis")
+
+  outlet        Outlet       @relation(fields: [outletId], references: [id])
+  supplier      Supplier?    @relation(fields: [supplierId], references: [id])
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  conversions   Conversion[]
+  wasteLogs     WasteLog[]
+  restockLogs   RestockLog[]
+  mitraScopes   MitraStockScope[]
+  displayGroupId String?       @map("display_group_id")
+  displayGroup   DisplayGroup? @relation(fields: [displayGroupId], references: [id], onDelete: SetNull)
+
+  @@map("stock_items")
+}
+
+model RestockLog {
+  id          String    @id @default(cuid())
+  outletId    String    @map("outlet_id")
+  stockItemId String    @map("stock_item_id")
+  qtyAdded    Decimal   @map("qty_added")
+  stockBefore Decimal   @map("stock_before")
+  stockAfter  Decimal   @map("stock_after")
+  note        String?
+  createdAt   DateTime  @default(now())
+
+  outlet    Outlet    @relation(fields: [outletId], references: [id])
+  stockItem StockItem @relation(fields: [stockItemId], references: [id])
+
+  @@index([outletId, createdAt])
+  @@index([stockItemId, createdAt])
+  @@map("restock_logs")
+}
+
+// ═══ Product (dijual dalam PORSI) ═══
+model Product {
+  id               String            @id @default(cuid())
+  outletId         String            @map("outlet_id")
+  name             String
+  category         String
+  price            Decimal
+  hpp              Decimal           @default(0)
+  imageUrl         String?           @map("image_url")
+  isActive         Boolean           @default(true) @map("is_active")
+  displayGroupId   String?           @map("display_group_id")
+  outlet           Outlet            @relation(fields: [outletId], references: [id], onDelete: Cascade)
+  displayGroup     DisplayGroup?     @relation(fields: [displayGroupId], references: [id], onDelete: SetNull)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  conversions      Conversion[]
+  transactionItems TransactionItem[]
+  mitraScopes      MitraProductScope[]
+
+  @@index([outletId])
+  @@map("products")
+}
+
+// ═══ Konversi Porsi → Unit ═══
+model Conversion {
+  id          String    @id @default(cuid())
+  productId   String    @map("product_id")
+  stockItemId String    @map("stock_item_id")
+  ratio       Decimal   // 1 porsi = ratio biji
+  
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  stockItem   StockItem @relation(fields: [stockItemId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, stockItemId])
+  @@map("conversions")
+}
+
+// ═══ Transaksi (Header) ═══
+model Transaction {
+  id            String            @id @default(cuid())
+  outletId      String            @map("outlet_id")
+  invoiceNumber String            @unique @map("invoice_number")
+  totalAmount   Decimal           @map("total_amount")
+  /** null jika belum dibayar */
+  paymentMethod String?           @map("payment_method")
+  cashReceived  Decimal?          @map("cash_received")
+  changeAmount  Decimal?          @map("change_amount")
+  note          String?
+  createdAt     DateTime          @default(now())
+  paymentStatus String            @default("PAID") @map("payment_status")
+  paidAt        DateTime?         @map("paid_at")
+
+  outlet        Outlet            @relation(fields: [outletId], references: [id])
+  items         TransactionItem[]
+
+  @@index([outletId, paymentStatus, createdAt])
+  @@map("transactions")
+}
+
+// ═══ Transaksi Detail (Items) ═══
+model TransactionItem {
+  id            String      @id @default(cuid())
+  transactionId String      @map("transaction_id")
+  productId     String      @map("product_id")
+  productName   String      @map("product_name")
+  qtyPorsi      Int         @map("qty_porsi")
+  pricePerPorsi Decimal     @map("price_per_porsi")
+  subtotal      Decimal
+  note          String?
+  
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  product       Product     @relation(fields: [productId], references: [id])
+
+  @@map("transaction_items")
+}
+
+// ═══ Petty Cash (Pengeluaran Laci) ═══
+model PettyCash {
+  id          String   @id @default(cuid())
+  outletId    String   @map("outlet_id")
+  amount      Decimal
+  category    String   // "Es Batu", "Gas", "Listrik", "Parkir", "Lainnya"
+  description String?
+  createdAt   DateTime @default(now())
+
+  outlet      Outlet   @relation(fields: [outletId], references: [id])
+
+  @@map("petty_cash")
+}
+
+// ═══ Waste Log (Stok Basi/Rusak) ═══
+model WasteLog {
+  id          String    @id @default(cuid())
+  outletId    String    @map("outlet_id")
+  stockItemId String    @map("stock_item_id")
+  qtyBiji     Decimal   @map("qty_biji")
+  reason      String
+  createdAt   DateTime  @default(now())
+
+  outlet      Outlet    @relation(fields: [outletId], references: [id])
+  stockItem   StockItem @relation(fields: [stockItemId], references: [id])
+
+  @@map("waste_logs")
+}
+
+// ═══ Shift / Rekonsiliasi ═══
+model ShiftRecord {
+  id                String    @id @default(cuid())
+  outletId          String    @map("outlet_id")
+  openedAt          DateTime  @default(now()) @map("opened_at")
+  closedAt          DateTime? @map("closed_at")
+  openingCash       Decimal   @map("opening_cash")
+  expectedCash      Decimal?  @map("expected_cash")
+  actualCash        Decimal?  @map("actual_cash")
+  discrepancy       Decimal? 
+  totalSalesCash    Decimal?  @map("total_sales_cash")
+  totalSalesQris    Decimal?  @map("total_sales_qris")
+  totalExpenses     Decimal?  @map("total_expenses")
+  note              String?
+  status            String    @default("OPEN") // "OPEN" | "CLOSED"
+
+  outlet            Outlet    @relation(fields: [outletId], references: [id])
+
+  @@map("shift_records")
+}
