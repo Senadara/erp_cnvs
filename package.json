@@ -12,11 +12,12 @@
     "start": "node server.js",
     "cpanel:migrate": "prisma migrate deploy",
     "cpanel:seed": "prisma db seed",
+    "cpanel:seed:owner": "node scripts/seed-owner.mjs",
     "cpanel:deploy": "npm run cpanel:migrate",
     "lint": "eslint"
   },
   "prisma": {
-    "seed": "npx tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

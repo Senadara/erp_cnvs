@@ -125,9 +125,14 @@ npm -v
 ## Bagian 6 — Migrasi database
 
 ```bash
-npx prisma migrate deploy
-npx prisma db seed   # opsional, akun owner pertama
+npm run cpanel:migrate
+# Akun owner pertama (ringan, untuk cPanel):
+npm run cpanel:seed:owner
+# Data demo lengkap (berat — jalankan di komputer lokal, bukan di shared hosting):
+# npm run cpanel:seed
 ```
+
+**Jangan** pakai `npx prisma` tanpa versi (bisa mengunduh Prisma 7). Pakai `npm run cpanel:migrate`.
 
 ---
 
@@ -223,6 +228,9 @@ Build di hook **tidak diaktifkan** secara default (hindari error EAGAIN).
 | `npm: command not found` | `source .../nodevenv/.../activate` dulu |
 | `DATABASE_URL` not found | Buat `.env` di root app |
 | `P1010` access denied | ALL PRIVILEGES + encode password URL (`!` → `%21`) |
+| `P1000` authentication failed | Password/username di `.env` salah atau belum di-encode |
+| `timer has gone away` saat seed | Batas resource hosting — pakai `npm run cpanel:seed:owner` |
+| Prisma 7 / `url` tidak didukung | Jangan `npx prisma` — pakai `npm run cpanel:migrate` |
 | `@tailwindcss/postcss` not found | `npm install` (paket sudah di `dependencies` + `.npmrc include=dev`) |
 | `EAGAIN` saat build | Build di lokal, upload `.next` |
 | Folder `.next tidak ditemukan` | Upload hasil `npm run build` lokal |
