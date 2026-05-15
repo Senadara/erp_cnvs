@@ -136,9 +136,15 @@ npm run cpanel:seed:owner
 
 ---
 
-## Bagian 7 — Build (disarankan di komputer lokal)
+## Bagian 7 — Build HANYA di komputer lokal (wajib)
 
-Shared hosting sering gagal build dengan error **`EAGAIN`** (batas proses/worker).  
+**Jangan `npm run build` di server cPanel/CloudLinux.**
+
+Alasan:
+
+1. **`node_modules` symlink** ke `nodevenv` → Turbopack error: *Symlink points out of filesystem root*
+2. **Batas resource** → error `EAGAIN` / `timer has gone away`
+
 **Build di PC**, lalu upload folder `.next`.
 
 ### Di Windows (project lokal)
@@ -160,14 +166,9 @@ Upload folder **`.next/`** ke:
 Via File Manager, FTP, atau `rsync`.  
 Jangan upload `node_modules` dari PC.
 
-### Build di server (opsional, jika resource cukup)
+### Jangan build di server
 
-```bash
-npm install --include=dev
-export UV_THREADPOOL_SIZE=1
-export NODE_OPTIONS="--max-old-space-size=2048"
-npm run build
-```
+Perintah `npm run build` di SSH **tidak didukung** pada CloudLinux Node.js Selector.
 
 ---
 
@@ -229,7 +230,45 @@ Build di hook **tidak diaktifkan** secara default (hindari error EAGAIN).
 | `DATABASE_URL` not found | Buat `.env` di root app |
 | `P1010` access denied | ALL PRIVILEGES + encode password URL (`!` → `%21`) |
 | `P1000` authentication failed | Password/username di `.env` salah atau belum di-encode |
-| `timer has gone away` saat seed | Batas resource hosting — pakai `npm run cpanel:seed:owner` |
+| `timer has gone away` saat seed | Jangan `prisma db seed` — pakai `node scripts/seed-owner.mjs` |
+| Turbopack symlink error saat build | Jangan build di server — build lokal, upload `.next` |
+| Index of / + `/login` 404 | Tidak ada `.htaccess` Passenger atau Node tidak ter-proxy — lihat bawah |
+| `EADDRINUSE` port 3000 | App cPanel sudah jalan — jangan `node server.js` manual |
+
+### Index of + 404 pada domain
+
+Apache masih menampilkan folder, bukan Next.js. Perbaiki:
+
+1. Pastikan ada `.htaccess` dengan blok `PassengerStartupFile server.js` (lihat `deploy/htaccess.cpanel.example`)
+2. **Setup Node.js App** → URL = `erpcanvas.senadara.my.id`, root = `apps/erp_cnvs`, startup = `server.js` → **Restart**
+3. Upload `server.js` terbaru (`LISTEN_HOST` / bind `0.0.0.0`, bukan IP publik dari env `HOSTNAME`)
+4. Tes: `curl -I http://127.0.0.1:3000/login` di SSH — jika 200/307, masalah hanya di Passenger/`.htaccess`
+
+| `Missing script cpanel:*` | Belum push GitHub — lihat bagian "Tanpa git pull" di bawah |
+| `user block limit reached` | Quota disk penuh — bersihkan `~/.npm`, minta tambah quota |
+
+---
+
+## Tanpa git pull (server belum dapat update)
+
+### Migrate
+
+```bash
+./node_modules/.bin/prisma migrate deploy
+```
+
+### Seed owner (bukan `prisma db seed`)
+
+```bash
+node scripts/seed-owner.mjs
+```
+
+Buat file jika belum ada: salin dari `scripts/seed-owner.mjs` di repo (atau push GitHub dulu).
+
+### Build
+
+Hanya di PC Windows → upload folder `.next/` ke server.
+
 | Prisma 7 / `url` tidak didukung | Jangan `npx prisma` — pakai `npm run cpanel:migrate` |
 | `@tailwindcss/postcss` not found | `npm install` (paket sudah di `dependencies` + `.npmrc include=dev`) |
 | `EAGAIN` saat build | Build di lokal, upload `.next` |

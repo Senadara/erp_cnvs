@@ -1,0 +1,13 @@
+# Salin ke: /home/senadar1/apps/erp_cnvs/.htaccess
+# Ganti path nodevenv jika versi Node bukan 20.
+# Lebih aman: buat ulang aplikasi di cPanel → Setup Node.js App (file ini dibuat otomatis).
+
+Options -Indexes
+
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/senadar1/apps/erp_cnvs"
+PassengerBaseURI "/"
+PassengerNodejs "/home/senadar1/nodevenv/apps/erp_cnvs/20/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
