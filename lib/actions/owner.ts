@@ -3,7 +3,7 @@
 import Decimal from "decimal.js";
 import { prisma } from "@/lib/prisma";
 import { toDecimal } from "@/lib/money";
-import { getOpenShift } from "@/lib/actions/expense";
+import { getOpenShift } from "@/lib/actions/shift";
 import { loadSessionUser } from "@/lib/session";
 import { canSeeNav } from "@/lib/permissions";
 

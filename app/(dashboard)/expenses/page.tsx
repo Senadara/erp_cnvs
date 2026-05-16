@@ -1,6 +1,7 @@
 import { requireNav } from "@/lib/guard";
 import { resolveOutletId } from "@/lib/actions/outlet";
-import { listPettyCashToday, getOpenShift, getShiftFinancialDetail } from "@/lib/actions/expense";
+import { listPettyCashToday } from "@/lib/actions/expense";
+import { getOpenShift, getShiftFinancialDetail } from "@/lib/actions/shift";
 import { ExpensesManager, type ShiftFinancialPayload } from "@/components/expenses/expenses-manager";
 
 export default async function ExpensesPage() {

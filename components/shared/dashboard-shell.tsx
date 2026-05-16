@@ -53,23 +53,47 @@ type Outlet = { id: string; name: string };
 
 export type ShellUser = SessionUser;
 
-const allNav: {
-  href: string;
-  label: string;
-  icon: typeof LayoutDashboard;
-  feature: NavFeature;
+const navGroups: {
+  title: string;
+  items: {
+    href: string;
+    label: string;
+    icon: typeof LayoutDashboard;
+    feature: NavFeature;
+  }[];
 }[] = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard, feature: "dashboard" },
-  { href: "/cashier", label: "Kasir", icon: ShoppingCart, feature: "cashier" },
-  { href: "/products", label: "Produk", icon: Package, feature: "products" },
-  { href: "/stock", label: "Stok", icon: Warehouse, feature: "stock" },
-  { href: "/expenses", label: "Keuangan Shift", icon: Wallet, feature: "expenses" },
-  { href: "/waste", label: "Waste", icon: Trash2, feature: "waste" },
-  { href: "/reports", label: "Laporan", icon: BarChart3, feature: "reports" },
-  { href: "/receipts", label: "Struk", icon: Receipt, feature: "receipts" },
-  { href: "/outlets", label: "Outlet", icon: Store, feature: "outlets" },
-  { href: "/owner", label: "Owner", icon: Building2, feature: "owner" },
-  { href: "/users", label: "Pengguna", icon: Users, feature: "users" },
+  {
+    title: "Utama",
+    items: [
+      { href: "/", label: "Dashboard", icon: LayoutDashboard, feature: "dashboard" },
+      { href: "/cashier", label: "Kasir", icon: ShoppingCart, feature: "cashier" },
+      { href: "/receipts", label: "Struk", icon: Receipt, feature: "receipts" },
+    ],
+  },
+  {
+    title: "Inventori",
+    items: [
+      { href: "/products", label: "Produk", icon: Package, feature: "products" },
+      { href: "/stock", label: "Stok", icon: Warehouse, feature: "stock" },
+      { href: "/waste", label: "Waste", icon: Trash2, feature: "waste" },
+    ],
+  },
+  {
+    title: "Keuangan & Laporan",
+    items: [
+      { href: "/expenses", label: "Keuangan Shift", icon: Wallet, feature: "expenses" },
+      { href: "/reports", label: "Laporan Performa", icon: BarChart3, feature: "reports" },
+      { href: "/reports/shifts", label: "Riwayat Shift", icon: Receipt, feature: "reports" },
+    ],
+  },
+  {
+    title: "Manajemen",
+    items: [
+      { href: "/outlets", label: "Outlet", icon: Store, feature: "outlets" },
+      { href: "/owner", label: "Owner", icon: Building2, feature: "owner" },
+      { href: "/users", label: "Pengguna", icon: Users, feature: "users" },
+    ],
+  },
 ];
 
 function ShellNavLinks({
@@ -83,37 +107,58 @@ function ShellNavLinks({
   collapsed: boolean;
   onNavigate?: () => void;
 }) {
-  const nav = allNav.filter((item) => canSeeNav(user, item.feature));
+  const allItems = navGroups.flatMap(g => g.items);
+  
   return (
-    <nav className="flex flex-col gap-1 p-2">
-      {nav.map((item) => {
-        const active =
-          item.href === "/"
-            ? pathname === "/"
-            : pathname === item.href || pathname.startsWith(`${item.href}/`);
-        const Icon = item.icon;
+    <nav className="flex flex-col gap-6 p-2">
+      {navGroups.map((group) => {
+        const allowedItems = group.items.filter((item) => canSeeNav(user, item.feature));
+        if (allowedItems.length === 0) return null;
+
         return (
-          <Link
-            key={item.href}
-            href={item.href}
-            title={collapsed ? item.label : undefined}
-            onClick={() => {
-              onNavigate?.();
-            }}
-          >
-            <span
-              className={cn(
-                "flex min-h-12 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors",
-                collapsed ? "justify-center px-0" : "",
-                active
-                  ? "bg-primary/15 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
-              <Icon className="size-5 shrink-0" />
-              {!collapsed && item.label}
-            </span>
-          </Link>
+          <div key={group.title} className="space-y-1">
+            {!collapsed && (
+              <h3 className="px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2">
+                {group.title}
+              </h3>
+            )}
+            <div className="flex flex-col gap-0.5">
+              {allowedItems.map((item) => {
+                const isExact = pathname === item.href;
+                const isPrefix = item.href !== "/" && pathname.startsWith(`${item.href}/`);
+                // Check if there's a more specific match in allItems
+                const hasBetterMatch = allItems.some(
+                  (other) => other.href !== item.href && pathname.startsWith(other.href) && other.href.length > item.href.length
+                );
+                const active = isExact || (isPrefix && !hasBetterMatch);
+                
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    title={collapsed ? item.label : undefined}
+                    onClick={() => {
+                      onNavigate?.();
+                    }}
+                  >
+                    <span
+                      className={cn(
+                        "flex min-h-10 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors",
+                        collapsed ? "justify-center px-0 h-10 min-h-0" : "",
+                        active
+                          ? "bg-primary/15 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
+                    >
+                      <Icon className={cn("size-5 shrink-0", active ? "text-primary" : "text-muted-foreground/70")} />
+                      {!collapsed && item.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
         );
       })}
     </nav>
@@ -150,7 +195,8 @@ export function DashboardShell({
     void setSidebarCollapsed(next);
   };
 
-  const mobileNav = allNav.filter((item) => canSeeNav(user, item.feature)).slice(0, 6);
+  const allItems = navGroups.flatMap(g => g.items);
+  const mobileNav = allItems.filter((item) => canSeeNav(user, item.feature)).slice(0, 6);
 
   return (
     <OutletProvider outletId={outletId}>
@@ -280,10 +326,12 @@ export function DashboardShell({
         <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/60 bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden">
           <div className="mx-auto grid max-w-lg grid-cols-6 gap-1 px-1 pt-1">
             {mobileNav.map((item) => {
-              const active =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
+              const isExact = pathname === item.href;
+              const isPrefix = item.href !== "/" && pathname.startsWith(`${item.href}/`);
+              const hasBetterMatch = allItems.some(
+                (other) => other.href !== item.href && pathname.startsWith(other.href) && other.href.length > item.href.length
+              );
+              const active = isExact || (isPrefix && !hasBetterMatch);
               const Icon = item.icon;
               return (
                 <Link

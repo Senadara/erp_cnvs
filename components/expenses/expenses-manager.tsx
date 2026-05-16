@@ -27,7 +27,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { closeShift, openShift, recordExpense } from "@/lib/actions/expense";
+import { recordExpense } from "@/lib/actions/expense";
+import { closeShift, openShift } from "@/lib/actions/shift";
 import { formatCurrencyIdr } from "@/lib/money";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

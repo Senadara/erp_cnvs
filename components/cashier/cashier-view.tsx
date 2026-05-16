@@ -25,6 +25,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { printReceipt, type ReceiptTx } from "@/lib/receipt-print";
+import { closeShift, getShiftFinancialDetail } from "@/lib/actions/shift";
 
 type ProductRow = {
   id: string;
@@ -54,6 +55,10 @@ export function CashierView({
   const [note, setNote] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [unpaidOnly, setUnpaidOnly] = React.useState(false);
+  const [closeShiftOpen, setCloseShiftOpen] = React.useState(false);
+  const [actualCash, setActualCash] = React.useState("");
+  const [closeNote, setCloseNote] = React.useState("");
+  const [shiftDetail, setShiftDetail] = React.useState<any>(null);
 
   const items = useCartStore((s) => s.items);
   const paymentMethod = useCartStore((s) => s.paymentMethod);
@@ -242,14 +247,15 @@ export function CashierView({
             variant="outline"
             size="sm"
             onClick={async () => {
-              if (confirm("Apakah Anda yakin ingin menutup shift ini?")) {
-                try {
-                  const { closeShift } = await import("@/lib/actions/shift");
-                  await closeShift(shiftId);
-                  toast.success("Shift berhasil ditutup");
-                } catch (e) {
-                  toast.error(e instanceof Error ? e.message : "Gagal menutup shift");
-                }
+              setBusy(true);
+              try {
+                const detail = await getShiftFinancialDetail(shiftId);
+                setShiftDetail(detail);
+                setCloseShiftOpen(true);
+              } catch (e) {
+                toast.error("Gagal memuat detail shift");
+              } finally {
+                setBusy(false);
               }
             }}
           >
@@ -415,6 +421,95 @@ export function CashierView({
             </Button>
             <Button onClick={onPay} disabled={busy}>
               {busy ? "Memproses..." : unpaidOnly ? "Simpan order" : "Selesaikan"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={closeShiftOpen} onOpenChange={setCloseShiftOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Tutup Shift Kasir</DialogTitle>
+          </DialogHeader>
+          {shiftDetail && (
+            <div className="space-y-4 py-2">
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <span className="text-muted-foreground">Kas Awal:</span>
+                <span className="text-right font-medium">{formatCurrencyIdr(shiftDetail.sebelumBuka.kasAwal)}</span>
+                <span className="text-muted-foreground">Penjualan Tunai:</span>
+                <span className="text-right font-medium text-green-600">{formatCurrencyIdr(shiftDetail.selamaShift.paidCash)}</span>
+                <span className="text-muted-foreground">Total Pengeluaran:</span>
+                <span className="text-right font-medium text-red-600">-{formatCurrencyIdr(shiftDetail.pengeluaran.total)}</span>
+                <span className="text-muted-foreground">Tambah Modal:</span>
+                <span className="text-right font-medium text-blue-600">+{formatCurrencyIdr(shiftDetail.tambahan.total)}</span>
+                <div className="col-span-2 border-t pt-2 mt-1 flex justify-between font-bold">
+                  <span>ESTIMASI LACI:</span>
+                  <span className="text-primary">{formatCurrencyIdr(shiftDetail.selamaShift.expectedCashInDrawer)}</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="actualCash">Kas Aktual di Laci (Rp)</Label>
+                <Input
+                  id="actualCash"
+                  className="h-12 text-lg font-semibold"
+                  inputMode="decimal"
+                  placeholder="Masukkan jumlah uang fisik..."
+                  value={actualCash}
+                  onChange={(e) => setActualCash(e.target.value)}
+                />
+                {actualCash && !isNaN(Number(actualCash)) && (
+                  <div className="flex justify-between text-xs mt-1">
+                    <span className="text-muted-foreground">Selisih:</span>
+                    <span className={cn(
+                      "font-bold",
+                      Number(actualCash) - Number(shiftDetail.selamaShift.expectedCashInDrawer) === 0 
+                        ? "text-green-500" 
+                        : "text-red-500"
+                    )}>
+                      {formatCurrencyIdr(Number(actualCash) - Number(shiftDetail.selamaShift.expectedCashInDrawer))}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="closeNote">Catatan Shift (opsional)</Label>
+                <Input
+                  id="closeNote"
+                  className="h-12"
+                  placeholder="Misal: Uang receh habis..."
+                  value={closeNote}
+                  onChange={(e) => setCloseNote(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCloseShiftOpen(false)} disabled={busy}>
+              Batal
+            </Button>
+            <Button 
+              onClick={async () => {
+                if (!actualCash) {
+                  toast.error("Harap masukkan kas aktual");
+                  return;
+                }
+                setBusy(true);
+                try {
+                  await closeShift(shiftId, actualCash, closeNote);
+                  toast.success("Shift berhasil ditutup");
+                  setCloseShiftOpen(false);
+                  router.refresh();
+                } catch (e) {
+                  toast.error(e instanceof Error ? e.message : "Gagal menutup shift");
+                } finally {
+                  setBusy(false);
+                }
+              }} 
+              disabled={busy || !actualCash}
+            >
+              {busy ? "Menutup..." : "Tutup Shift Sekarang"}
             </Button>
           </DialogFooter>
         </DialogContent>
