@@ -1,9 +1,16 @@
 import type { NextConfig } from "next";
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 const nextConfig: NextConfig = {
-  // Kurangi worker parallel saat build di shared hosting (opsional)
   experimental: {
     webpackBuildWorker: false,
+    // Server Actions di belakang proxy cPanel (subdomain)
+    ...(allowedOrigins?.length
+      ? { serverActions: { allowedOrigins } }
+      : {}),
   },
   images: {
     unoptimized: true,

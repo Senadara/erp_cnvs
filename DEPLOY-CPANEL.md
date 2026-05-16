@@ -1,296 +1,380 @@
 # Deploy ERP ke cPanel (GitHub → Pull → Build → Run)
 
-Panduan untuk hosting **CloudLinux + Node.js Selector** dengan clone/pull dari **GitHub**.
+Panduan untuk hosting **CloudLinux + Node.js Selector** dengan **GitHub**. Diperbarui berdasarkan penyesuaian production nyata.
 
-Aplikasi dijalankan lewat **`server.js`** atau **`app.js`** (keduanya setara).
+Aplikasi dijalankan lewat **`server.js`** atau **`app.js`** (alias).
 
 ---
 
 ## Ringkasan alur
 
 ```text
-GitHub repo
-    ↓  (clone / pull)
-/home/USERNAME/apps/erp_cnvs/
-    ↓  Run NPM Install (symlink node_modules)
-    ↓  .env + migrate
-    ↓  npm run build (LOKAL, lalu upload .next) — disarankan
-    ↓  Startup: server.js
-    ↓  Restart Node.js App
+GitHub
+  → git pull → ~/apps/erp_cnvs/
+  → Setup Node.js App + Run NPM Install (symlink node_modules)
+  → file .env + variabel lingkungan di panel
+  → prisma migrate + prisma generate (+ seed owner)
+  → BUILD di komputer Windows → ZIP .next (tanpa cache/dev) → upload & extract
+  → .htaccess Passenger (buat lewat Setup Node.js App)
+  → Restart Node.js App
 ```
+
+**Tidak** build di server. **Ya** jalankan **`prisma generate`** di server setelah install/update dependency.
 
 ---
 
 ## Prasyarat
 
 | Item | Keterangan |
-|------|------------|
-| cPanel | Fitur **Git™ Version Control** + **Setup Node.js App** |
-| Node.js | **20.x** (min. 18) |
-| MySQL | Database + user dengan **ALL PRIVILEGES** |
-| GitHub | Repo project (public atau deploy key untuk private) |
+|------|-------------|
+| cPanel | **Git™ Version Control** + **Setup Node.js App** |
+| Node.js | **20.x** (minimal 18) |
+| MySQL | User + DB dengan **ALL PRIVILEGES** |
+| GitHub | Repo kode |
 
 ---
 
-## Bagian 1 — Siapkan database (cPanel)
+## 1. Database MySQL
 
-1. **MySQL® Databases** → buat database, mis. `senadar1_erp_cnvs`
-2. Buat user, mis. `senadar1_user_erp_cnvs`
-3. **Add User To Database** → **ALL PRIVILEGES**
+1. **MySQL® Databases** → buat database + user  
+2. **Add User To Database** → centang **ALL PRIVILEGES**
 
-Format `DATABASE_URL` (encode karakter khusus di password):
+**Selalu URL-encode** karakter password di connection string (`!` → `%21`, `@` → `%40`, dll.):
 
 ```env
-# Password !Canvas123 → %21Canvas123
-DATABASE_URL="mysql://USER:%21PASSWORD@localhost:3306/NAMA_DATABASE"
+DATABASE_URL="mysql://USERNAME:%21PASSWORD@localhost:3306/USERNAME_erpcnvs"
 AUTH_SECRET="string-acak-minimal-16-karakter"
 NODE_ENV=production
 ```
 
----
+Error umum:
 
-## Bagian 2 — Clone repo dari GitHub (sekali)
-
-1. cPanel → **Git™ Version Control**
-2. **Clone** → URL repo GitHub Anda
-3. **Repository Path**: `apps/erp_cnvs`  
-   (akan menjadi `/home/USERNAME/apps/erp_cnvs`)
-
-**Penting (CloudLinux):** Jangan upload / commit folder `node_modules` ke repo.  
-cPanel akan membuat **symlink** `node_modules` setelah **Run NPM Install**.
+- **P1010** / **P1000**: user tidak di-assign atau password URL salah → encode + ALL PRIVILEGES.
 
 ---
 
-## Bagian 3 — Setup Node.js App
+## 2. Clone / path GitHub
 
-1. cPanel → **Setup Node.js App** → **Create Application**
+1. **Git™ Version Control** → **Clone** → path repo: **`apps/erp_cnvs`**  
+   Path lengkap: `/home/USERNAME/apps/erp_cnvs`
 
-| Field | Nilai |
-|-------|--------|
-| Node.js version | 20.x |
-| Application mode | Production |
+Jangan commit `node_modules`, `.next`, atau `.env` ke GitHub.
+
+---
+
+## 3. Subdomain & Document Root
+
+Di **Domains** Anda boleh set Document Root submenu ke **`/apps/erp_cnvs`** (path relatif dari home). Itu konsisten dengan kode Anda.
+
+Ini **belum** mencukupi: tanpa Node.js Selector, Anda hanya dapat **directory listing**.
+
+| Gejala | Arti |
+|--------|------|
+| **Index of** di `/` | Apache melayani folder; **tidak ada** atau rusak blok **Passenger** di `.htaccess` |
+| **404** untuk `/login` | Request masih ke Apache sebagai file biasa |
+
+**Wajib** buat aplikasi di **Setup Node.js App**:
+
+| Field | Nilai tipikal |
+|-------|----------------|
 | Application root | `apps/erp_cnvs` |
-| Application URL | subdomain Anda |
-| Application startup file | **`server.js`** atau **`app.js`** |
+| Application URL | subdomain, mis. `erpcanvas.domain.tld` |
+| Startup file | **`server.js`** |
+| Mode | Production |
 
-2. Klik **Create**
-3. Klik **Run NPM Install** (wajib — membuat symlink `node_modules`)
+Klik **Run NPM Install** (membuat symlink `node_modules`). Setelah itu biasanya ada file **`.htaccess`** Passenger di folder app.
 
-### Environment variables (di halaman Node.js App)
+Contoh blok (buat ulang aplikasi kalau hilang):
 
-Tambahkan (sama seperti file `.env`):
+- Lihat `deploy/htaccess.cpanel.example`
 
-- `NODE_ENV` = `production`
-- `DATABASE_URL` = connection string MySQL
-- `AUTH_SECRET` = minimal 16 karakter
+Tambahkan baris atas jika listing masih muncul:
 
-`PORT` biasanya di-set otomatis oleh cPanel.
+```apache
+Options -Indexes
+```
 
 ---
 
-## Bagian 4 — File `.env` di server
+## 4. Variabel lingkungan
 
-Buat `/home/USERNAME/apps/erp_cnvs/.env` (File Manager atau Terminal):
+### File `.env` di server (`~/apps/erp_cnvs/.env`)
 
 ```env
 NODE_ENV=production
-DATABASE_URL="mysql://USER:PASSWORD@localhost:3306/NAMA_DATABASE"
-AUTH_SECRET="ganti-dengan-secret-min-16-char"
+DATABASE_URL="mysql://..."
+AUTH_SECRET="minimal-16-karakter"
+
+# Akun pertama (script seed-owner)
 SEED_OWNER_EMAIL="owner@perusahaan.com"
 SEED_OWNER_PASSWORD="PasswordKuat123!"
+
+# Opsional — Server Actions di belakang proxy subdomain (pisahkan dengan koma untuk banyak domain)
+ALLOWED_ORIGINS=erpcanvas.domain.tld
+
+# Opsional — jika cookie harus pakai insecure (hanya tes HTTP)
+# COOKIE_SECURE=0
 ```
 
-File `.env` tidak ada di GitHub (di-ignore). Buat manual di server.
+### Mirror di Setup Node.js App
+
+Di halaman aplikasi Node, set environment variables yang sama (`NODE_ENV`, `DATABASE_URL`, `AUTH_SECRET`, `ALLOWED_ORIGINS`).
+
+**Restart** setelah mengubah env.
 
 ---
 
-## Bagian 5 — Aktifkan virtual environment (SSH)
+## 5. SSH — aktifkan environment Node
 
-Perintah `npm` / `npx` **tidak** tersedia di shell biasa. Salin perintah **“Enter to the virtual environment”** dari halaman **Setup Node.js App**, contoh:
-
-```bash
-source /home/USERNAME/nodevenv/apps/erp_cnvs/20/bin/activate
-cd /home/USERNAME/apps/erp_cnvs
-```
-
-Cek:
-
-```bash
-which npm
-npm -v
-```
-
----
-
-## Bagian 6 — Migrasi database
-
-```bash
-npm run cpanel:migrate
-# Akun owner pertama (ringan, untuk cPanel):
-npm run cpanel:seed:owner
-# Data demo lengkap (berat — jalankan di komputer lokal, bukan di shared hosting):
-# npm run cpanel:seed
-```
-
-**Jangan** pakai `npx prisma` tanpa versi (bisa mengunduh Prisma 7). Pakai `npm run cpanel:migrate`.
-
----
-
-## Bagian 7 — Build HANYA di komputer lokal (wajib)
-
-**Jangan `npm run build` di server cPanel/CloudLinux.**
-
-Alasan:
-
-1. **`node_modules` symlink** ke `nodevenv` → Turbopack error: *Symlink points out of filesystem root*
-2. **Batas resource** → error `EAGAIN` / `timer has gone away`
-
-**Build di PC**, lalu upload folder `.next`.
-
-### Di Windows (project lokal)
-
-```powershell
-cd D:\Activity\Canvas\erp_cnvs
-npm install
-npm run build
-```
-
-### Upload ke server
-
-Upload folder **`.next/`** ke:
-
-```text
-/home/USERNAME/apps/erp_cnvs/.next/
-```
-
-Via File Manager, FTP, atau `rsync`.  
-Jangan upload `node_modules` dari PC.
-
-### Jangan build di server
-
-Perintah `npm run build` di SSH **tidak didukung** pada CloudLinux Node.js Selector.
-
----
-
-## Bagian 8 — Jalankan & restart
-
-1. Pastikan folder `.next` ada di server
-2. cPanel → **Setup Node.js App** → **Restart**
-3. Buka URL subdomain → halaman login
-
-Startup memuat `dotenv`, mengecek `.next`, lalu menjalankan Next.js lewat HTTP server custom.
-
----
-
-## Bagian 9 — Update dari GitHub (pull rutin)
-
-### Opsi A — Manual
-
-1. cPanel → **Git™ Version Control** → repo → **Pull**
-2. SSH:
+Tanpa aktivasi ini, `npm` / `path` prisma tidak ada:
 
 ```bash
 source /home/USERNAME/nodevenv/apps/erp_cnvs/20/bin/activate
 cd ~/apps/erp_cnvs
-git pull origin main
-npm install
-npx prisma migrate deploy
+which npm && npm -v
 ```
 
-3. Jika ada perubahan kode front-end: **build ulang di lokal** → upload `.next` baru
-4. **Restart** Node.js App
+Sesuaikan `20` dengan versi Node di panel Anda.
 
-### Opsi B — Hook otomatis `.cpanel.yml`
+Di Windows lokal untuk **cek browser**, buka:
 
-1. Edit `.cpanel.yml` di repo — ganti `USERNAME` dan path Node
-2. Commit & push ke GitHub
-3. Setiap **Pull** di cPanel, task deploy dijalankan otomatis (migrate, npm install)
+- `http://localhost:3000/login`  
 
-Build di hook **tidak diaktifkan** secara default (hindari error EAGAIN).
+Bukan `http://0.0.0.0:3000` (alamat itu tidak valid di browser).
 
 ---
 
-## Checklist deploy pertama
+## 6. Install dependency & Prisma Client (KRITIKAL di server)
 
-- [ ] Repo di-clone ke `apps/erp_cnvs`
-- [ ] Node.js App dibuat, startup **`server.js`**
-- [ ] **Run NPM Install** (symlink `node_modules`)
-- [ ] `.env` dibuat di server
-- [ ] `npx prisma migrate deploy` sukses
-- [ ] `.next` ada (build lokal + upload)
-- [ ] Restart app → login berfungsi
+Setelah clone atau **`git pull`** yang mengubah `package.json` / schema:
 
----
+```bash
+source .../activate
+cd ~/apps/erp_cnvs
+npm install
+# atau: Run NPM Install di cPanel — menjalankan postinstall prisma generate jika ada
+```
 
-## Troubleshooting
+**Pastikan generator Prisma ada** — tanpa itu login dan halaman apa pun akan error seperti:
 
-| Masalah | Solusi |
-|---------|--------|
-| `npm: command not found` | `source .../nodevenv/.../activate` dulu |
-| `DATABASE_URL` not found | Buat `.env` di root app |
-| `P1010` access denied | ALL PRIVILEGES + encode password URL (`!` → `%21`) |
-| `P1000` authentication failed | Password/username di `.env` salah atau belum di-encode |
-| `timer has gone away` saat seed | Jangan `prisma db seed` — pakai `node scripts/seed-owner.mjs` |
-| Turbopack symlink error saat build | Jangan build di server — build lokal, upload `.next` |
-| Index of / + `/login` 404 | Tidak ada `.htaccess` Passenger atau Node tidak ter-proxy — lihat bawah |
-| `EADDRINUSE` port 3000 | App cPanel sudah jalan — jangan `node server.js` manual |
+```text
+Cannot find module '.prisma/client/default'
+```
 
-### Index of + 404 pada domain
+Jalankan jika ragau:
 
-Apache masih menampilkan folder, bukan Next.js. Perbaiki:
+```bash
+./node_modules/.bin/prisma generate
+```
 
-1. Pastikan ada `.htaccess` dengan blok `PassengerStartupFile server.js` (lihat `deploy/htaccess.cpanel.example`)
-2. **Setup Node.js App** → URL = `erpcanvas.senadara.my.id`, root = `apps/erp_cnvs`, startup = `server.js` → **Restart**
-3. Upload `server.js` terbaru (`LISTEN_HOST` / bind `0.0.0.0`, bukan IP publik dari env `HOSTNAME`)
-4. Tes: `curl -I http://127.0.0.1:3000/login` di SSH — jika 200/307, masalah hanya di Passenger/`.htaccess`
+Jangan bergantung pada `npx prisma` tanpa path (bisa unduh CLI **Prisma 7**, tidak cocok schema v6 repo ini).
 
-| `Missing script cpanel:*` | Belum push GitHub — lihat bagian "Tanpa git pull" di bawah |
-| `user block limit reached` | Quota disk penuh — bersihkan `~/.npm`, minta tambah quota |
-
----
-
-## Tanpa git pull (server belum dapat update)
-
-### Migrate
+Migrasi schema:
 
 ```bash
 ./node_modules/.bin/prisma migrate deploy
 ```
 
-### Seed owner (bukan `prisma db seed`)
+Atau jika `package.json` sudah ada script dari repo yang ter-push:
+
+```bash
+npm run cpanel:migrate
+```
+
+### Migrasi CLI — hindari versi salah
+
+| Perintah | Rekomendasi |
+|-------------|--------------|
+| `./node_modules/.bin/prisma migrate deploy` | Aman |
+| `npm run cpanel:migrate` | Aman |
+| `npx prisma migrate deploy` | Bisa mendownload Prisma 7 → gagal parsing schema |
+
+Seed **ringan** (disarankan di shared hosting):
 
 ```bash
 node scripts/seed-owner.mjs
 ```
 
-Buat file jika belum ada: salin dari `scripts/seed-owner.mjs` di repo (atau push GitHub dulu).
-
-### Build
-
-Hanya di PC Windows → upload folder `.next/` ke server.
-
-| Prisma 7 / `url` tidak didukung | Jangan `npx prisma` — pakai `npm run cpanel:migrate` |
-| `@tailwindcss/postcss` not found | `npm install` (paket sudah di `dependencies` + `.npmrc include=dev`) |
-| `EAGAIN` saat build | Build di lokal, upload `.next` |
-| Folder `.next tidak ditemukan` | Upload hasil `npm run build` lokal |
-| `node_modules` conflict | Hapus folder nyata, **Run NPM Install** lagi |
+Hindari **`prisma db seed`** besar di shared hosting (`timer has gone away`).
 
 ---
 
-## Script npm yang tersedia
+## 7. Build HANYA di komputer Windows
 
-| Script | Fungsi |
-|--------|--------|
-| `npm start` | `node server.js` |
-| `npm run build` | Build production Next.js |
-| `npm run cpanel:migrate` | `prisma migrate deploy` |
-| `npm run cpanel:seed` | Seed data awal |
-| `npm run cpanel:deploy` | Migrate saja (setelah pull) |
+**Jangan** `npm run build` di server CloudLinux symlink — error umum:
+
+- Turbopack: symlink `node_modules` invalid  
+- atau **EAGAIN** / worker Tailwind  
+
+Di PC:
+
+```powershell
+cd D:\Activity\Canvas\erp_cnvs
+npm install
+
+# Sesuaikan domain production untuk konfig Next (experimental.serverActions)
+# File .env lokal bisa berisi ALLOWED_ORIGINS=erpcanvas.domain.tld
+
+npm run build
+```
+
+**Buat artefak lebih kecil** — jangan zip folder development:
+
+```powershell
+Remove-Item -Recurse -Force .next\cache -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force .next\trace, .next\diagnostics -ErrorAction SilentlyContinue
+
+# Opsional ukuran paket ZIP
+Compress-Archive -Path .next -DestinationPath next-build.zip -Force
+(Get-Item next-build.zip).Length / 1MB
+```
+
+Ukuran zip sehat biasanya puluhan MB, **bukan** ratusan (kalau besar, pastikan tidak ada `.next/dev`).
+
+Upload ke **`~/apps/erp_cnvs/`**, lalu SSH:
+
+```bash
+cd ~/apps/erp_cnvs
+rm -rf .next
+unzip -o next-build.zip
+```
+
+Struktur benar:
+
+```text
+apps/erp_cnvs/.next/BUILD_ID       ← langsung di sini
+apps/erp_cnvs/.next/server/...
+apps/erp_cnvs/.next/static/...
+```
+
+Bukan **`apps/erp_cnvs/.next/.next`** (nested – extract lagi dengan benar).
+
+### Izin setelah unzip
+
+```bash
+chown -R USERNAME:USERNAME .next   # bisa gagal beberapa path jika pemilik root → hapus .next dan extract sebagai USERNAME
+find .next -type d -exec chmod 755 {} \;
+find .next -type f -exec chmod 644 {} \;
+```
 
 ---
 
-## Keamanan
+## 8. Restart & verifikasi
 
-- Jangan commit `.env` ke GitHub
-- Gunakan **HTTPS** di production (cookie auth memakai `secure`)
-- Ganti password database jika pernah terpapar
+1. **Setup Node.js App** → **Restart**  
+2. Tes dari SSH:
+
+```bash
+curl -I http://127.0.0.1:PORT/login
+```
+
+`PORT` sering **3000** (lihat `stderr.log` atau halaman aplikasi Node). Status **500** bisa berarti kurang **`prisma generate`** atau env salah (`DATABASE_URL`, `AUTH_SECRET`, dll.).
+
+**Jangan** menjalankan `node server.js` manual jika app panel sudah jalan — Anda akan dapat **EADDRINUSE**. Untuk debug: Stop app panel dulu atau gunakan **`curl`** untuk menguji tanpa dua proses sekaligus.
+
+3. Browser: **`https://subdomain/login`** (prefer HTTPS untuk cookie sesi).
+
+---
+
+## 9. Quota disk
+
+`df -h ~` bisa menampilkan ruang besar sementara Anda tetap gagal **`user block limit reached`**. Itu bisa **quota CloudLinux per-user**.
+
+Membersihkan aman:
+
+```bash
+rm -rf ~/.npm/_cacache ~/.npm/_logs
+du -sh ~/* ~/nodevenv ~/.npm | sort -hr
+```
+
+Quota kecil bisa membuat **`npm install`** gagal dengan **errno -122**.
+
+---
+
+## 10. Pembaruan proyek (workflow)
+
+Susunan keputusan setelah ada commit baru:
+
+### A. Hanya ubah backend / prisma / paket NPM
+
+```bash
+source .../activate
+cd ~/apps/erp_cnvs
+git pull
+npm install
+./node_modules/.bin/prisma generate
+./node_modules/.bin/prisma migrate deploy
+```
+Restart aplikasi panel.
+
+### B. Ubah halaman Next / CSS / komponen / middleware / konfig Next
+
+Selain langkah **A**:
+
+1. Di Windows: **`git pull`**  
+2. Atur **`ALLOWED_ORIGINS`** kalau subdomain berubah  
+3. **`npm install`** dan **`npm run build`**  
+4. Hapus `.next/cache` (dll.) seperti bagian 7  
+5. Upload **`.next` baru**, extract, chmod  
+6. **`prisma generate`** di server tetap boleh dijalankan jika dependency berubah  
+7. Restart
+
+### C. Hanya pembaruan `.env` atau variabel panel
+
+Restart Node.js App (dan pastikan tidak ada penyimpangan antara file `.env` dan env panel).
+
+### Checklist cepat pembaruan
+
+- [ ] `git pull`  
+- [ ] `npm install` (atau Run NPM Install)  
+- [ ] `./node_modules/.bin/prisma generate`  
+- [ ] `./node_modules/.bin/prisma migrate deploy` (kalau ada migrasi baru)  
+- [ ] Upload `.next` baru **hanya** jika ada perubahan frontend / konfig bundler yang relevan  
+- [ ] `chown`/chmod `.next` bila unzip via root  
+- [ ] Restart aplikasi  
+
+---
+
+## 11. Troubleshooting lengkap
+
+| Gejala / error | Langkah utama |
+|----------------|----------------|
+| `npm: command not found` | `source .../nodevenv/.../activate` |
+| `Missing script: cpanel:*` | Repo di server tidak ter-update — **`git pull`** dari branch yang benar |
+| `DATABASE_URL` not found Prisma | Pastikan ada **`.env`** di root aplikasi (`~/apps/erp_cnvs`) |
+| Prisma schema `url not supported` (P1012) | Anda pakai CLI **Prisma 7** — pakai **`./node_modules/.bin/prisma`** |
+| **`Cannot find module '.prisma/client/default'`** | **`./node_modules/.bin/prisma generate`** lalu Restart |
+| `prisma: command not found` / npx gagal | **`./node_modules/.bin/prisma generate`** bukan **`npx prisma`** sembarangan |
+| `timer has gone away` (seed besar) | Pakai **`node scripts/seed-owner.mjs`** — bukan full seed di shared hosting |
+| Zip `.next` ratusan MB | Ada `.next/dev` atau cache — build bersih dari **`npm run build`**, hapus **`cache`** |
+| Turbopack symlink / tidak bisa build server | Tetap pada **build lokal** |
+| **`Index of`** di domain | Passenger + **`.htaccess`** + URL di Node App benar → **`Options -Indexes`** |
+| **`EADDRINUSE`** saat tes manual `node server.js` | Proses Passenger sudya listen — Stop app atau hanya tes dengan **`curl`** |
+| **`EACCES`** di `.next/static` | **chown**/chmod seperti bagian 7 |
+| **`chown`** gagal beberapa path | Mungkin file milik root — hapus **`rm -rf .next`** dan unzip lagi sebagai **user hosting** |
+| Login **error generik browser** / digest | Cek **`stderr.log`**, kemungkinan Prisma atau env — perbaiki **`prisma generate`** & **`DATABASE_URL`** & **`ALLOWED_ORIGINS`** |
+| `user block limit reached` / write -122 | Bersihkan **cache npm** & file besar; tingkatkan **quota** akun |
+
+---
+
+## 12. File referensi repo
+
+| File | Fungsi |
+|------|--------|
+| `.env.example` | Contoh variabel lingkungan |
+| `deploy/htaccess.cpanel.example` | Contoh `.htaccess` Passenger |
+| `scripts/seed-owner.mjs` | Seed ringan satu owner |
+| `server.js` | Entry production (listen `PORT`, bind tidak memakai `HOSTNAME` IP publik) |
+
+---
+
+## 13. Keamanan
+
+- Jangan commit **`.env`**
+- Ganti kata sandi database jika pernah bocor
+- Produksi pakai **HTTPS**
+- Pertahankan **Prisma di major 6** sampai codebase dimigrasi ke Prisma 7 secara sengaja
+
+---
+
+Ringkasannya: pull di server → **install** → **`prisma generate` + migrate** → dari PC **build** → upload **`.next`** → **restart**. Tanpa **`prisma generate`**, Anda akan dapat error modul `.prisma/client` walau **`npm install`** sukses.

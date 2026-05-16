@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import type { UserRole } from "@prisma/client";
 import { SESSION_COOKIE } from "@/lib/session-constants";
@@ -25,11 +25,25 @@ function getSecretKey() {
   return new TextEncoder().encode(s);
 }
 
+function getNext6AM(): Date {
+  const now = new Date();
+  const currentUtc = now.getTime();
+  const jakartaDate = new Date(currentUtc + 7 * 60 * 60 * 1000);
+  
+  if (jakartaDate.getUTCHours() >= 6) {
+    jakartaDate.setUTCDate(jakartaDate.getUTCDate() + 1);
+  }
+  jakartaDate.setUTCHours(6, 0, 0, 0);
+  
+  return new Date(jakartaDate.getTime() - 7 * 60 * 60 * 1000);
+}
+
 export async function createSessionToken(userId: string) {
+  const expiresAt = getNext6AM();
   return new SignJWT({ sub: userId })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime(Math.floor(expiresAt.getTime() / 1000))
     .sign(getSecretKey());
 }
 
@@ -70,14 +84,24 @@ export async function loadSessionUser(): Promise<SessionUser | null> {
   }
 }
 
+async function cookieSecure(): Promise<boolean> {
+  if (process.env.COOKIE_SECURE === "0") return false;
+  if (process.env.COOKIE_SECURE === "1") return true;
+  const h = await headers();
+  const proto = h.get("x-forwarded-proto");
+  if (proto) return proto.split(",")[0]?.trim() === "https";
+  return process.env.NODE_ENV === "production";
+}
+
 export async function setSessionCookie(token: string) {
   const jar = await cookies();
+  const expiresAt = getNext6AM();
   jar.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: await cookieSecure(),
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    expires: expiresAt,
   });
 }
 

@@ -3,7 +3,8 @@ import { getOutlets } from "@/lib/actions/outlet";
 import { listUsers, listStocksForOutlets } from "@/lib/actions/user";
 import { listProductOptions } from "@/lib/actions/product";
 import { UsersManager } from "@/components/users/users-manager";
-
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 export default async function UsersPage() {
   await requireNav("users");
   const outlets = await getOutlets();
@@ -26,12 +27,17 @@ export default async function UsersPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Pengguna & hak akses</h1>
-        <p className="text-muted-foreground text-sm">
-          <strong>Owner</strong> otomatis mengakses semua outlet. <strong>Petugas/Mitra</strong>: centang outlet
-          yang boleh diakses (bisa satu atau beberapa). Petugas juga bisa diatur fitur menu per akun.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Pengguna & hak akses</h1>
+          <p className="text-muted-foreground text-sm">
+            <strong>Owner</strong> otomatis mengakses semua outlet. <strong>Petugas/Mitra</strong>: centang outlet
+            yang boleh diakses (bisa satu atau beberapa). Petugas juga bisa diatur fitur menu per akun.
+          </p>
+        </div>
+        <Button variant="outline" asChild>
+          <Link href="/users/logs">Histori Interaksi</Link>
+        </Button>
       </div>
       <UsersManager
         initialUsers={users}
