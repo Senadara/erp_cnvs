@@ -33,7 +33,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-const CATEGORIES = ["Es Batu", "Gas", "Listrik", "Parkir", "Lainnya"];
+const CATEGORIES = ["Es Batu", "Gas", "Listrik", "Parkir", "Tambah Modal", "Lainnya"];
 
 type Shift = {
   id: string;
@@ -52,6 +52,7 @@ export type ShiftFinancialPayload = {
     paidQris: string;
     unpaidCount: number;
     unpaidTotal: string;
+    totalKembalian: string;
     expectedCashInDrawer: string;
     unpaidOrders: {
       id: string;
@@ -61,6 +62,16 @@ export type ShiftFinancialPayload = {
     }[];
   };
   pengeluaran: {
+    total: string;
+    rows: {
+      id: string;
+      amount: string;
+      category: string;
+      description: string | null;
+      createdAt: string;
+    }[];
+  };
+  tambahan: {
     total: string;
     rows: {
       id: string;
@@ -185,6 +196,9 @@ export function ExpensesManager({
                 {formatCurrencyIdr(shiftFinancial.selamaShift.paidQris)} ·{" "}
                 {shiftFinancial.selamaShift.paidTransactionCount} struk
               </p>
+              <p className="text-muted-foreground text-xs font-medium mt-1">
+                Total Kembalian Diberikan: <span className="text-orange-500">{formatCurrencyIdr(shiftFinancial.selamaShift.totalKembalian)}</span>
+              </p>
               <Separator className="my-2" />
               <p className="text-muted-foreground text-xs font-medium uppercase">Belum lunas</p>
               <p className="tabular-nums">
@@ -202,14 +216,27 @@ export function ExpensesManager({
             </div>
             <div className="bg-muted/40 space-y-2 rounded-lg border p-3 text-sm">
               <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                Pengeluaran laci
+                Pengeluaran & Tambahan
               </p>
-              <p className="text-lg font-semibold tabular-nums">
-                {formatCurrencyIdr(shiftFinancial.pengeluaran.total)}
-              </p>
-              <p className="text-muted-foreground text-xs">
-                {shiftFinancial.pengeluaran.rows.length} entri dalam periode shift
-              </p>
+              <div className="flex justify-between">
+                <span>Pengeluaran:</span>
+                <span className="font-semibold text-red-500 tabular-nums">
+                  {formatCurrencyIdr(shiftFinancial.pengeluaran.total)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Tambah Modal:</span>
+                <span className="font-semibold text-green-500 tabular-nums">
+                  {formatCurrencyIdr(shiftFinancial.tambahan.total)}
+                </span>
+              </div>
+              <Separator className="my-1" />
+              <div className="flex justify-between font-semibold mt-2 bg-primary/10 p-2 rounded">
+                <span className="text-primary">LACI AKTUAL:</span>
+                <span className="text-primary tabular-nums">
+                  {formatCurrencyIdr(shiftFinancial.selamaShift.expectedCashInDrawer)}
+                </span>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -250,7 +277,7 @@ export function ExpensesManager({
       </div>
 
       <div className="bg-card space-y-4 rounded-xl border p-4">
-        <h2 className="text-lg font-semibold">Catat pengeluaran</h2>
+        <h2 className="text-lg font-semibold">Catat Pengeluaran / Tambah Modal</h2>
         <div className="grid gap-2">
           <Label>Nominal</Label>
           <Input
@@ -314,7 +341,9 @@ export function ExpensesManager({
                   {r.description ?? "—"}
                 </TableCell>
                 <TableCell className="text-right tabular-nums">
-                  {formatCurrencyIdr(r.amount)}
+                  <span className={r.category === "Tambah Modal" ? "text-green-500 font-medium" : "text-red-500"}>
+                    {r.category === "Tambah Modal" ? "+" : "-"}{formatCurrencyIdr(r.amount)}
+                  </span>
                 </TableCell>
               </TableRow>
             ))}

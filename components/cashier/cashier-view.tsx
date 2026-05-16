@@ -38,10 +38,12 @@ export function CashierView({
   outletId,
   products,
   stockMap,
+  shiftId,
 }: {
   outletId: string;
   products: ProductRow[];
   stockMap: Record<string, number>;
+  shiftId: string;
 }) {
   const router = useRouter();
   const [q, setQ] = React.useState("");
@@ -231,9 +233,28 @@ export function CashierView({
   return (
     <div className="flex min-h-[calc(100dvh-8rem)] flex-col gap-4 pb-24 lg:flex-row lg:items-start lg:pb-0">
       <div className="min-w-0 flex-1 space-y-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Kasir</h1>
-          <p className="text-muted-foreground text-sm">Pilih produk dan bayar</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">Kasir</h1>
+            <p className="text-muted-foreground text-sm">Pilih produk dan bayar</p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              if (confirm("Apakah Anda yakin ingin menutup shift ini?")) {
+                try {
+                  const { closeShift } = await import("@/lib/actions/shift");
+                  await closeShift(shiftId);
+                  toast.success("Shift berhasil ditutup");
+                } catch (e) {
+                  toast.error(e instanceof Error ? e.message : "Gagal menutup shift");
+                }
+              }
+            }}
+          >
+            Tutup Shift
+          </Button>
         </div>
 
         <div className="relative">

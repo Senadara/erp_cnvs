@@ -99,12 +99,17 @@ export async function closeShift(
       where: { outletId, createdAt: { gte: openedAt } },
     });
     let totalExpenses = new Decimal(0);
+    let totalTambahan = new Decimal(0);
     for (const e of expenses) {
-      totalExpenses = totalExpenses.plus(toDecimal(e.amount));
+      if (e.category === "Tambah Modal") {
+        totalTambahan = totalTambahan.plus(toDecimal(e.amount));
+      } else {
+        totalExpenses = totalExpenses.plus(toDecimal(e.amount));
+      }
     }
 
     const opening = toDecimal(shift.openingCash);
-    const expectedCash = opening.plus(totalSalesCash).minus(totalExpenses);
+    const expectedCash = opening.plus(totalSalesCash).plus(totalTambahan).minus(totalExpenses);
     const discrepancy = actual.minus(expectedCash);
     const now = new Date();
 
@@ -156,15 +161,21 @@ export async function getShiftFinancialDetail(shiftId: string) {
 
   const paid = await prisma.transaction.findMany({
     where: { ...rangeWhere, paymentStatus: "PAID" },
-    select: { id: true, totalAmount: true, paymentMethod: true, createdAt: true, invoiceNumber: true },
+    select: { id: true, totalAmount: true, paymentMethod: true, createdAt: true, invoiceNumber: true, changeAmount: true },
     orderBy: { createdAt: "asc" },
   });
 
   let cash = new Decimal(0);
   let qris = new Decimal(0);
+  let totalKembalian = new Decimal(0);
   for (const t of paid) {
     const amt = toDecimal(t.totalAmount);
-    if (t.paymentMethod === "CASH") cash = cash.plus(amt);
+    if (t.paymentMethod === "CASH") {
+      cash = cash.plus(amt);
+      if (t.changeAmount) {
+        totalKembalian = totalKembalian.plus(toDecimal(t.changeAmount));
+      }
+    }
     else if (t.paymentMethod === "QRIS") qris = qris.plus(amt);
   }
   const paidTotal = paid.reduce((a, t) => a.plus(toDecimal(t.totalAmount)), new Decimal(0));
@@ -183,10 +194,11 @@ export async function getShiftFinancialDetail(shiftId: string) {
     },
     orderBy: { createdAt: "asc" },
   });
-  const pettyTotal = pettyRows.reduce((a, p) => a.plus(toDecimal(p.amount)), new Decimal(0));
+  const pettyTotal = pettyRows.reduce((a, p) => p.category !== "Tambah Modal" ? a.plus(toDecimal(p.amount)) : a, new Decimal(0));
+  const tambahanTotal = pettyRows.reduce((a, p) => p.category === "Tambah Modal" ? a.plus(toDecimal(p.amount)) : a, new Decimal(0));
 
   const opening = toDecimal(shift.openingCash);
-  const expectedDrawer = opening.plus(cash).minus(pettyTotal);
+  const expectedDrawer = opening.plus(cash).plus(tambahanTotal).minus(pettyTotal);
 
   return {
     shift: {
@@ -208,18 +220,29 @@ export async function getShiftFinancialDetail(shiftId: string) {
       paidQris: qris.toString(),
       unpaidCount: unpaid.length,
       unpaidTotal: unpaidTotal.toString(),
+      totalKembalian: totalKembalian.toString(),
       unpaidOrders: unpaid.map((u) => ({
         id: u.id,
         invoiceNumber: u.invoiceNumber,
         totalAmount: u.totalAmount.toString(),
         createdAt: u.createdAt.toISOString(),
       })),
-      /** Perkiraan uang tunai di laci = kas awal + penjualan tunai − pengeluaran tunai (QRIS terpisah). */
+      /** Perkiraan uang tunai di laci = kas awal + penjualan tunai + tambahan modal − pengeluaran tunai */
       expectedCashInDrawer: expectedDrawer.toString(),
     },
     pengeluaran: {
       total: pettyTotal.toString(),
-      rows: pettyRows.map((p) => ({
+      rows: pettyRows.filter(p => p.category !== "Tambah Modal").map((p) => ({
+        id: p.id,
+        amount: p.amount.toString(),
+        category: p.category,
+        description: p.description,
+        createdAt: p.createdAt.toISOString(),
+      })),
+    },
+    tambahan: {
+      total: tambahanTotal.toString(),
+      rows: pettyRows.filter(p => p.category === "Tambah Modal").map((p) => ({
         id: p.id,
         amount: p.amount.toString(),
         category: p.category,

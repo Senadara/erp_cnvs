@@ -22,6 +22,7 @@ export default async function ExpensesPage() {
         sebelumBuka: detail.sebelumBuka,
         selamaShift: detail.selamaShift,
         pengeluaran: detail.pengeluaran,
+        tambahan: detail.tambahan,
       };
     }
   }
@@ -29,8 +30,8 @@ export default async function ExpensesPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Pengeluaran laci</h1>
-        <p className="text-muted-foreground text-sm">Catat pengeluaran dan kelola shift kasir</p>
+        <h1 className="text-2xl font-semibold tracking-tight">Keuangan Shift</h1>
+        <p className="text-muted-foreground text-sm">Kelola arus kas laci, pengeluaran, dan tambahan modal shift</p>
       </div>
       <ExpensesManager
         outletId={outletId}

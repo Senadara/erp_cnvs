@@ -19,6 +19,7 @@ import {
   PanelLeftClose,
   PanelLeft,
   LogOut,
+  UserCircle,
 } from "lucide-react";
 import type { SessionUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
@@ -45,6 +46,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 
 type Outlet = { id: string; name: string };
@@ -61,7 +63,7 @@ const allNav: {
   { href: "/cashier", label: "Kasir", icon: ShoppingCart, feature: "cashier" },
   { href: "/products", label: "Produk", icon: Package, feature: "products" },
   { href: "/stock", label: "Stok", icon: Warehouse, feature: "stock" },
-  { href: "/expenses", label: "Pengeluaran", icon: Wallet, feature: "expenses" },
+  { href: "/expenses", label: "Keuangan Shift", icon: Wallet, feature: "expenses" },
   { href: "/waste", label: "Waste", icon: Trash2, feature: "waste" },
   { href: "/reports", label: "Laporan", icon: BarChart3, feature: "reports" },
   { href: "/receipts", label: "Struk", icon: Receipt, feature: "receipts" },
@@ -222,17 +224,27 @@ export function DashboardShell({
             <DropdownMenu>
               <DropdownMenuTrigger
                 className={cn(
-                  buttonVariants({ variant: "outline", size: "sm" }),
-                  "hidden h-11 max-w-[10rem] truncate sm:inline-flex"
+                  buttonVariants({ variant: "outline" }),
+                  "h-11 px-3 sm:px-4 flex items-center gap-2 max-w-[12rem]"
                 )}
               >
-                {user.displayName}
+                <UserCircle className="size-5 shrink-0" />
+                <span className="hidden truncate sm:inline">{user.displayName}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel className="truncate font-normal">
-                  <span className="block truncate text-xs text-muted-foreground">{user.email}</span>
-                  <span className="block truncate text-sm font-medium">{user.displayName}</span>
-                </DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel className="truncate font-normal">
+                    <span className="block truncate text-xs text-muted-foreground">{user.email}</span>
+                    <span className="block truncate text-sm font-medium">{user.displayName}</span>
+                  </DropdownMenuLabel>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="cursor-pointer">
+                    <UserCircle className="mr-2 size-4" />
+                    Profil
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => {

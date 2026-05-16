@@ -3,6 +3,7 @@ import { resolveOutletId } from "@/lib/actions/outlet";
 import { getProductStockSummary } from "@/lib/actions/stock";
 import { prisma } from "@/lib/prisma";
 import { CashierView } from "@/components/cashier/cashier-view";
+import { OpenShiftView } from "@/components/cashier/open-shift-view";
 
 export default async function CashierPage() {
   const user = await requireNav("cashier");
@@ -14,6 +15,15 @@ export default async function CashierPage() {
         Outlet belum tersedia. Seed database terlebih dahulu.
       </div>
     );
+  }
+
+  // Check if there is an active shift
+  const openShift = await prisma.shiftRecord.findFirst({
+    where: { outletId, status: "OPEN" },
+  });
+
+  if (!openShift) {
+    return <OpenShiftView outletId={outletId} />;
   }
 
   const products = await prisma.product.findMany({
@@ -38,5 +48,5 @@ export default async function CashierPage() {
     imageUrl: p.imageUrl,
   }));
 
-  return <CashierView outletId={outletId} products={serialized} stockMap={stockMap} />;
+  return <CashierView outletId={outletId} products={serialized} stockMap={stockMap} shiftId={openShift.id} />;
 }
