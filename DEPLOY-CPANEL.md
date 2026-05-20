@@ -379,7 +379,7 @@ npm install --no-audit --no-fund
 | **`EACCES`** di `.next/static` | **chown**/chmod seperti bagian 7 |
 | **`chown`** gagal beberapa path | Mungkin file milik root — hapus **`rm -rf .next`** dan unzip lagi sebagai **user hosting** |
 | Login **error generik browser** / digest | Cek **`stderr.log`**, kemungkinan Prisma atau env — perbaiki **`prisma generate`** & **`DATABASE_URL`** & **`ALLOWED_ORIGINS`** |
-| **`Could not find Prisma Schema`** saat `npm install` (postinstall), padahal `prisma/schema.prisma` ada | cPanel Node Selector sering menjalankan lifecycle dari CWD **`nodevenv/.../lib`**. Pastikan repo pakai **`postinstall`** lewat `node scripts/postinstall-prisma.mjs` (lihat `package.json`), lalu **`git pull`** dan ulang `npm install`. Sementara: `npm install --ignore-scripts` lalu `./node_modules/.bin/prisma generate` dari root app. |
+| **`Could not find Prisma Schema`** saat `npm install` (postinstall), padahal `prisma/schema.prisma` ada | cPanel Node Selector sering menjalankan lifecycle dari CWD **`nodevenv/.../lib`**. Pastikan repo terbaru: **`postinstall`** memakai launcher `node -e "..."` yang membaca **`npm_package_json`** lalu menjalankan `scripts/postinstall-prisma.cjs` dari root app (lihat `package.json`), lalu **`git pull`** dan ulang `npm install`. Sementara: `npm install --ignore-scripts` lalu `./node_modules/.bin/prisma generate` dari root app. |
 
 ---
 
@@ -389,7 +389,7 @@ npm install --no-audit --no-fund
 |------|--------|
 | `.env.example` | Contoh variabel lingkungan |
 | `deploy/htaccess.cpanel.example` | Contoh `.htaccess` Passenger |
-| `scripts/postinstall-prisma.mjs` | `postinstall` aman di cPanel: jalankan `prisma generate` dari root repo |
+| `scripts/postinstall-prisma.cjs` | `postinstall` aman di cPanel: `prisma generate` dari root repo (CWD nodevenv tidak mengganggu) |
 | `server.js` | Entry production (listen `PORT`, bind tidak memakai `HOSTNAME` IP publik) |
 
 ---
