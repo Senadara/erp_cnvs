@@ -285,11 +285,9 @@ export function DashboardShell({
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/profile" className="cursor-pointer">
-                    <UserCircle className="mr-2 size-4" />
-                    Profil
-                  </Link>
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
+                  <UserCircle className="mr-2 size-4" />
+                  Profil
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

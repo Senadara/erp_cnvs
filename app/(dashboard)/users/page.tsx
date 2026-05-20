@@ -4,7 +4,7 @@ import { listUsers, listStocksForOutlets } from "@/lib/actions/user";
 import { listProductOptions } from "@/lib/actions/product";
 import { UsersManager } from "@/components/users/users-manager";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 export default async function UsersPage() {
   await requireNav("users");
   const outlets = await getOutlets();
@@ -35,9 +35,9 @@ export default async function UsersPage() {
             yang boleh diakses (bisa satu atau beberapa). Petugas juga bisa diatur fitur menu per akun.
           </p>
         </div>
-        <Button variant="outline" asChild>
-          <Link href="/users/logs">Histori Interaksi</Link>
-        </Button>
+        <Link href="/users/logs" className={buttonVariants({ variant: "outline" })}>
+          Histori Interaksi
+        </Link>
       </div>
       <UsersManager
         initialUsers={users}

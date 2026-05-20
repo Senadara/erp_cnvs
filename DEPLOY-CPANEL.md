@@ -333,6 +333,32 @@ Restart Node.js App (dan pastikan tidak ada penyimpangan antara file `.env` dan 
 - [ ] `chown`/chmod `.next` bila unzip via root  
 - [ ] Restart aplikasi  
 
+### Checklist anti-NPROC (WAJIB untuk shared hosting)
+
+- [ ] **Stop Node.js App lebih dulu** di panel sebelum `npm install` / `prisma generate` / `migrate deploy`
+- [ ] Jalankan command deploy **serial** (satu per satu), jangan paralel di beberapa terminal/sesi
+- [ ] **Jangan build di server** (`npm run build` hanya di komputer lokal)
+- [ ] Gunakan `./node_modules/.bin/prisma ...`, hindari `npx prisma ...`
+- [ ] Hindari full seed saat deploy rutin; gunakan seed ringan (`node scripts/seed-owner.mjs`) bila perlu
+- [ ] Setelah semua langkah selesai, baru **Start/Restart** Node.js App
+
+### Urutan command baku (server, mode aman NPROC)
+
+```bash
+source /home/USERNAME/nodevenv/apps/erp_cnvs/20/bin/activate
+cd ~/apps/erp_cnvs
+git pull
+npm run cpanel:deploy:safe
+```
+
+Jika tidak ada script helper, jalankan urutan manual:
+
+```bash
+npm install --no-audit --no-fund
+./node_modules/.bin/prisma generate
+./node_modules/.bin/prisma migrate deploy
+```
+
 ---
 
 ## 11. Troubleshooting lengkap
