@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "postinstall": "prisma generate",
+    "postinstall": "node scripts/postinstall-prisma.mjs",
     "start": "node server.js",
     "cpanel:install": "npm install --no-audit --no-fund",
     "cpanel:prisma:generate": "./node_modules/.bin/prisma generate",
