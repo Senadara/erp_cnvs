@@ -379,7 +379,7 @@ npm install --no-audit --no-fund
 | **`EACCES`** di `.next/static` | **chown**/chmod seperti bagian 7 |
 | **`chown`** gagal beberapa path | Mungkin file milik root — hapus **`rm -rf .next`** dan unzip lagi sebagai **user hosting** |
 | Login **error generik browser** / digest | Cek **`stderr.log`**, kemungkinan Prisma atau env — perbaiki **`prisma generate`** & **`DATABASE_URL`** & **`ALLOWED_ORIGINS`** |
-| **`Could not find Prisma Schema`** saat `npm install` (postinstall), padahal `prisma/schema.prisma` ada | cPanel Node Selector sering menjalankan lifecycle dari CWD **`nodevenv/.../lib`**. Pastikan repo terbaru: **`postinstall`** memakai launcher `node -e "..."` yang membaca **`npm_package_json`** lalu menjalankan `scripts/postinstall-prisma.cjs` dari root app (lihat `package.json`), lalu **`git pull`** dan ulang `npm install`. Sementara: `npm install --ignore-scripts` lalu `./node_modules/.bin/prisma generate` dari root app. |
+| **`Could not find Prisma Schema`** saat `npm install` (postinstall), padahal `prisma/schema.prisma` ada | cPanel Node Selector sering menjalankan lifecycle dari CWD **`nodevenv/.../lib`**. Pastikan repo terbaru: **`postinstall`** memakai launcher `node -e "..."` + **`scripts/postinstall-prisma.cjs`** yang mencari root via **`INIT_CWD`**, **`npm_config_local_prefix`**, lalu naik direktori dari **`npm_package_json`**. Jalankan install dari SSH setelah **`cd`** ke folder app (bukan hanya tombol panel jika skip masih muncul). Sementara: `./node_modules/.bin/prisma generate` dari root app. |
 
 ---
 

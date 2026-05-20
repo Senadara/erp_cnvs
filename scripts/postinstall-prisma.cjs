@@ -1,25 +1,63 @@
 /**
- * Prisma generate from application root (works when npm lifecycle CWD is wrong,
- * e.g. cPanel Node Selector using ~/nodevenv/.../lib).
+ * Prisma generate from real application root on cPanel Node Selector.
+ *
+ * npm lifecycle often sets npm_package_json to a path under ~/nodevenv/.../lib
+ * (where prisma/ does not exist). INIT_CWD is usually the directory where the
+ * user ran `npm install` (the real app root). We also walk up ancestors to find
+ * prisma/schema.prisma.
  */
 const { spawnSync } = require("node:child_process");
 const { existsSync } = require("node:fs");
 const path = require("node:path");
 
-function resolveRoot() {
-  const fromNpm = process.env.npm_package_json;
-  if (fromNpm) {
-    return path.dirname(path.resolve(fromNpm));
+const SCHEMA_REL = path.join("prisma", "schema.prisma");
+
+function ancestors(startDir, maxDepth = 14) {
+  const out = [];
+  let cur = path.resolve(startDir);
+  for (let i = 0; i < maxDepth; i++) {
+    out.push(cur);
+    const parent = path.dirname(cur);
+    if (parent === cur) break;
+    cur = parent;
   }
-  return path.join(__dirname, "..");
+  return out;
 }
 
-const root = resolveRoot();
-const schema = path.join(root, "prisma", "schema.prisma");
-const prismaCli = path.join(root, "node_modules", "prisma", "build", "index.js");
+function findAppRoot() {
+  const seen = new Set();
+  const rootsToWalk = [];
 
-if (!existsSync(schema)) {
-  console.warn("[postinstall] prisma/schema.prisma not found; skipping prisma generate.");
+  if (process.env.INIT_CWD) rootsToWalk.push(process.env.INIT_CWD);
+  /** npm 9+ often sets this to the project root during install */
+  if (process.env.npm_config_local_prefix) rootsToWalk.push(process.env.npm_config_local_prefix);
+  if (process.env.npm_package_json) {
+    rootsToWalk.push(path.dirname(path.resolve(process.env.npm_package_json)));
+  }
+  rootsToWalk.push(path.join(__dirname, ".."));
+
+  for (const start of rootsToWalk) {
+    if (!start) continue;
+    for (const dir of ancestors(start)) {
+      if (seen.has(dir)) continue;
+      seen.add(dir);
+      if (existsSync(path.join(dir, SCHEMA_REL))) return dir;
+    }
+  }
+  return null;
+}
+
+const root = findAppRoot();
+const schema = root ? path.join(root, SCHEMA_REL) : null;
+const prismaCli = root ? path.join(root, "node_modules", "prisma", "build", "index.js") : null;
+
+if (!root || !schema || !existsSync(schema)) {
+  console.warn(
+    "[postinstall] prisma/schema.prisma not found (INIT_CWD=%s npm_config_local_prefix=%s npm_package_json=%s); skipping prisma generate.",
+    process.env.INIT_CWD || "(unset)",
+    process.env.npm_config_local_prefix || "(unset)",
+    process.env.npm_package_json || "(unset)"
+  );
   process.exit(0);
 }
 
