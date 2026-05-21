@@ -14,10 +14,22 @@ export async function loginAction(_prev: LoginState | undefined, formData: FormD
       return { ok: false, error: "Isi email dan kata sandi." };
     }
     const { prisma } = await import("@/lib/prisma");
-    const user = await prisma.user.findUnique({
-      where: { email },
-      include: { outlets: { select: { outletId: true } } },
-    });
+    
+    let user;
+    try {
+      user = await prisma.user.findUnique({
+        where: { email },
+        include: { outlets: { select: { outletId: true } } },
+      });
+    } catch (dbErr) {
+      // Retry once to handle cPanel MySQL stale connection on cold starts
+      console.warn("[loginAction] First query failed, retrying...", dbErr);
+      user = await prisma.user.findUnique({
+        where: { email },
+        include: { outlets: { select: { outletId: true } } },
+      });
+    }
+    
     if (!user?.isActive) {
       return { ok: false, error: "Email atau kata sandi salah." };
     }
