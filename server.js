@@ -13,6 +13,8 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 // OPTIMASI NPROC: Membatasi thread pool bawaan Node.js
 process.env.UV_THREADPOOL_SIZE = "2"; 
+// OPTIMASI NPROC: Membatasi thread engine Rust Prisma ke 1 thread per instance!
+process.env.RAYON_NUM_THREADS = "1";
 // Mematikan background thread untuk Next.js Telemetry
 process.env.NEXT_TELEMETRY_DISABLED = "1";
 
