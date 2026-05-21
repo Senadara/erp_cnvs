@@ -11,6 +11,11 @@ const { parse } = require("url");
 
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 
+// OPTIMASI NPROC: Membatasi thread pool bawaan Node.js
+process.env.UV_THREADPOOL_SIZE = "2"; 
+// Mematikan background thread untuk Next.js Telemetry
+process.env.NEXT_TELEMETRY_DISABLED = "1";
+
 const dir = __dirname;
 const buildIdPath = path.join(dir, ".next", "BUILD_ID");
 const hasProductionBuild = fs.existsSync(buildIdPath);
