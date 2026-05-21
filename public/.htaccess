@@ -1,7 +1,0 @@
-# Membatasi instance Passenger Node.js ke 1 untuk menghemat NPROC
-<IfModule passenger_module>
-  PassengerAppEnv production
-  PassengerMaxInstances 1
-  PassengerMinInstances 1
-  PassengerMaxRequests 500
-</IfModule>
