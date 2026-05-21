@@ -5,7 +5,6 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",")
   .filter(Boolean);
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   experimental: {
     webpackBuildWorker: false,
     // Server Actions di belakang proxy cPanel (subdomain)
