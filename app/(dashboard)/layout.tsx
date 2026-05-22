@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const user = await loadSessionUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?clear=1");
 
   const allowed = user.role === "OWNER" ? null : user.outletIds;
   const outlets = await getOutletsForUser(allowed);

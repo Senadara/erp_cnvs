@@ -51,37 +51,44 @@ export async function loadSessionUser(): Promise<SessionUser | null> {
   const jar = await cookies();
   const tok = jar.get(SESSION_COOKIE)?.value;
   if (!tok) return null;
+  let payload;
   try {
-    const { payload } = await jwtVerify(tok, getSecretKey());
-    const sub = typeof payload.sub === "string" ? payload.sub : null;
-    if (!sub) return null;
-    const user = await prisma.user.findFirst({
-      where: { id: sub, isActive: true },
-      include: {
-        outlets: { select: { outletId: true } },
-        mitraProducts: { select: { productId: true } },
-        mitraStocks: { select: { stockItemId: true } },
-      },
-    });
-    if (!user) return null;
-    let outletIds = user.outlets.map((o) => o.outletId);
-    if (user.role === "OWNER") {
-      const all = await prisma.outlet.findMany({ select: { id: true } });
-      outletIds = all.map((o) => o.id);
-    }
-    return {
-      id: user.id,
-      email: user.email,
-      displayName: user.displayName,
-      role: user.role,
-      outletIds,
-      featureOverrides: user.featureOverrides as Record<string, boolean> | null,
-      mitraProductIds: user.mitraProducts.map((m) => m.productId),
-      mitraStockIds: user.mitraStocks.map((m) => m.stockItemId),
-    };
+    const verified = await jwtVerify(tok, getSecretKey());
+    payload = verified.payload;
   } catch {
     return null;
   }
+
+  const sub = typeof payload.sub === "string" ? payload.sub : null;
+  if (!sub) return null;
+
+  const user = await prisma.user.findFirst({
+    where: { id: sub, isActive: true },
+    include: {
+      outlets: { select: { outletId: true } },
+      mitraProducts: { select: { productId: true } },
+      mitraStocks: { select: { stockItemId: true } },
+    },
+  });
+
+  if (!user) return null;
+
+  let outletIds = user.outlets.map((o) => o.outletId);
+  if (user.role === "OWNER") {
+    const all = await prisma.outlet.findMany({ select: { id: true } });
+    outletIds = all.map((o) => o.id);
+  }
+
+  return {
+    id: user.id,
+    email: user.email,
+    displayName: user.displayName,
+    role: user.role,
+    outletIds,
+    featureOverrides: user.featureOverrides as Record<string, boolean> | null,
+    mitraProductIds: user.mitraProducts.map((m) => m.productId),
+    mitraStockIds: user.mitraStocks.map((m) => m.stockItemId),
+  };
 }
 
 async function cookieSecure(): Promise<boolean> {

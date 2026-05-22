@@ -39,7 +39,14 @@ export async function middleware(request: NextRequest) {
   }
 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
-  const isLogin = pathname === "/login";
+  const isLogin = pathname.startsWith("/login");
+
+  // Jika ada parameter ?clear=1, hapus cookie dan redirect bersih ke /login
+  if (request.nextUrl.searchParams.get("clear") === "1") {
+    const res = safeRedirect(request, "/login");
+    res.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0 });
+    return res;
+  }
 
   if (!token) {
     if (isLogin) return NextResponse.next();

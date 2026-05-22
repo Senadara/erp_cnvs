@@ -4,7 +4,7 @@ import { ProfileForm } from "@/components/profile/profile-form";
 
 export default async function ProfilePage() {
   const user = await loadSessionUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?clear=1");
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
