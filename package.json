@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "next build --webpack && node scripts/copy-standalone.mjs",
     "postinstall": "node -e \"const p=require('path');const f=require('fs');const {execFileSync}=require('child_process');const j=process.env.npm_package_json;if(!j){console.warn('[postinstall] npm_package_json unset; skip');process.exit(0)}const r=p.dirname(f.realpathSync(j));execFileSync(process.execPath,[p.join(r,'scripts','postinstall-prisma.cjs')],{cwd:r,stdio:'inherit'})\"",
     "start": "node server.js",
     "cpanel:install": "npm install --no-audit --no-fund",
