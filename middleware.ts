@@ -9,6 +9,19 @@ function secretBytes() {
   return new TextEncoder().encode(s);
 }
 
+/**
+ * Buat URL redirect yang aman untuk cPanel LiteSpeed proxy.
+ * cPanel meneruskan request sebagai HTTP lokal, tapi user mengakses via HTTPS.
+ * Kita TIDAK boleh mengubah protocol/host — biarkan browser & cPanel yang handle.
+ * Cukup redirect ke pathname saja (relative redirect).
+ */
+function safeRedirect(request: NextRequest, targetPath: string) {
+  const url = request.nextUrl.clone();
+  url.pathname = targetPath;
+  url.search = "";
+  return NextResponse.redirect(url);
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (
@@ -22,9 +35,7 @@ export async function middleware(request: NextRequest) {
   const secret = secretBytes();
   if (!secret) {
     if (pathname === "/login") return NextResponse.next();
-    const loginUrl = new URL("/login", request.url);
-    if (process.env.NODE_ENV === "production") loginUrl.protocol = "https:";
-    return NextResponse.redirect(loginUrl);
+    return safeRedirect(request, "/login");
   }
 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -32,24 +43,16 @@ export async function middleware(request: NextRequest) {
 
   if (!token) {
     if (isLogin) return NextResponse.next();
-    const loginUrl = new URL("/login", request.url);
-    if (process.env.NODE_ENV === "production") loginUrl.protocol = "https:";
-    return NextResponse.redirect(loginUrl);
+    return safeRedirect(request, "/login");
   }
 
   try {
     await jwtVerify(token, secret);
-    if (isLogin) {
-      const homeUrl = new URL("/", request.url);
-      if (process.env.NODE_ENV === "production") homeUrl.protocol = "https:";
-      return NextResponse.redirect(homeUrl);
-    }
+    if (isLogin) return safeRedirect(request, "/");
     return NextResponse.next();
   } catch {
     if (isLogin) return NextResponse.next();
-    const loginUrl = new URL("/login", request.url);
-    if (process.env.NODE_ENV === "production") loginUrl.protocol = "https:";
-    const res = NextResponse.redirect(loginUrl);
+    const res = safeRedirect(request, "/login");
     res.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0 });
     return res;
   }

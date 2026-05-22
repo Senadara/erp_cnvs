@@ -21,17 +21,25 @@ try {
   copyRecursiveSync('./.next/static', './.next/standalone/.next/static');
   console.log('Static assets copied successfully!');
 
-  // Patch server.js to support cPanel LiteSpeed named pipes in process.env.PORT
+  // Patch server.js to support cPanel LiteSpeed named pipes and proxy headers
   const serverJsPath = path.join('./.next/standalone/server.js');
   if (fs.existsSync(serverJsPath)) {
     let serverJs = fs.readFileSync(serverJsPath, 'utf8');
-    // Ganti parseInt(process.env.PORT, 10) dengan process.env.PORT agar string socket tidak jadi NaN
+    
+    // 1. Ganti parseInt(process.env.PORT, 10) dengan process.env.PORT agar string socket tidak jadi NaN
     serverJs = serverJs.replace(
       /parseInt\(process\.env\.PORT,\s*10\)/g,
       'process.env.PORT'
     );
+
+    // 2. Paksa trustHostHeader menjadi true agar Next.js membaca X-Forwarded-Proto dari cPanel
+    serverJs = serverJs.replace(
+      /"trustHostHeader":\s*false/g,
+      '"trustHostHeader":true'
+    );
+
     fs.writeFileSync(serverJsPath, serverJs, 'utf8');
-    console.log('Patched standalone/server.js for LiteSpeed socket compatibility!');
+    console.log('Patched standalone/server.js for LiteSpeed socket and proxy compatibility!');
   }
 } catch (error) {
   console.error('Error copying static assets:', error);
