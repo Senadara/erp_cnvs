@@ -22,7 +22,9 @@ export async function middleware(request: NextRequest) {
   const secret = secretBytes();
   if (!secret) {
     if (pathname === "/login") return NextResponse.next();
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    if (process.env.NODE_ENV === "production") loginUrl.protocol = "https:";
+    return NextResponse.redirect(loginUrl);
   }
 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -30,16 +32,24 @@ export async function middleware(request: NextRequest) {
 
   if (!token) {
     if (isLogin) return NextResponse.next();
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    if (process.env.NODE_ENV === "production") loginUrl.protocol = "https:";
+    return NextResponse.redirect(loginUrl);
   }
 
   try {
     await jwtVerify(token, secret);
-    if (isLogin) return NextResponse.redirect(new URL("/", request.url));
+    if (isLogin) {
+      const homeUrl = new URL("/", request.url);
+      if (process.env.NODE_ENV === "production") homeUrl.protocol = "https:";
+      return NextResponse.redirect(homeUrl);
+    }
     return NextResponse.next();
   } catch {
     if (isLogin) return NextResponse.next();
-    const res = NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    if (process.env.NODE_ENV === "production") loginUrl.protocol = "https:";
+    const res = NextResponse.redirect(loginUrl);
     res.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0 });
     return res;
   }
