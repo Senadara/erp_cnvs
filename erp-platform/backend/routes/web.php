@@ -41,7 +41,15 @@ Route::middleware(['auth', 'outlet'])->group(function () {
     Route::post('/shifts/open', [\App\Http\Controllers\ShiftController::class, 'store'])->name('shifts.store');
     Route::post('/shifts/{id}/close', [\App\Http\Controllers\ShiftController::class, 'update'])->name('shifts.update');
 
-    $modules = ['expenses', 'waste', 'reports', 'outlets', 'owner', 'users'];
+    // Expenses (Pengeluaran)
+    Route::get('/expenses', [\App\Http\Controllers\ExpenseController::class, 'index'])->name('expenses');
+    Route::post('/expenses', [\App\Http\Controllers\ExpenseController::class, 'store'])->name('expenses.store');
+    Route::delete('/expenses/{id}', [\App\Http\Controllers\ExpenseController::class, 'destroy'])->name('expenses.destroy');
+
+    // Reports (Laporan)
+    Route::get('/reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports');
+
+    $modules = ['waste', 'outlets', 'owner', 'users'];
     foreach ($modules as $module) {
         Route::get('/'.$module, function (\Illuminate\Http\Request $request) use ($module) {
             return app(\App\Http\Controllers\ModulePageController::class)->show($request, $module);
