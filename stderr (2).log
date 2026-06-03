@@ -1,0 +1,1056 @@
+[loginAction] Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.userActivityLog.create()` invocation:
+
+
+The table `user_activity_logs` does not exist in the current database.
+    at async g (.next/server/chunks/769.js:1:5639)
+    at async q (.next/server/app/(auth)/login/page.js:1:14893) {
+  code: 'P2021',
+  meta: { modelName: 'UserActivityLog', table: 'user_activity_logs' },
+  clientVersion: '6.19.3'
+}
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+
+thread '<unnamed>' panicked at /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.45.1/src/runtime/scheduler/multi_thread/worker.rs:460:13:
+OS can't spawn worker thread: Resource temporarily unavailable (os error 11)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+fatal runtime error: failed to initiate panic, error 5, aborting
+
+thread '<unnamed>' panicked at /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.45.1/src/runtime/scheduler/multi_thread/worker.rs:460:13:
+OS can't spawn worker thread: Resource temporarily unavailable (os error 11)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+fatal runtime error: failed to initiate panic, error 5, aborting
+
+thread '<unnamed>' panicked at /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.45.1/src/runtime/scheduler/multi_thread/worker.rs:460:13:
+OS can't spawn worker thread: Resource temporarily unavailable (os error 11)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+fatal runtime error: failed to initiate panic, error 5, aborting
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+node:internal/modules/cjs/loader:1210
+  throw err;
+  ^
+
+Error: Cannot find module 'dotenv'
+Require stack:
+- /home/senadar1/apps/canvas/server.js
+- /usr/local/lsws/fcgi-bin/lsnode.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Module._load (node:internal/modules/cjs/loader:1038:27)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (/home/senadar1/apps/canvas/server.js:26:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/senadar1/apps/canvas/server.js',
+    '/usr/local/lsws/fcgi-bin/lsnode.js'
+  ]
+}
+
+Node.js v20.20.2
+node:internal/modules/cjs/loader:1210
+  throw err;
+  ^
+
+Error: Cannot find module 'dotenv'
+Require stack:
+- /home/senadar1/apps/canvas/server.js
+- /usr/local/lsws/fcgi-bin/lsnode.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Module._load (node:internal/modules/cjs/loader:1038:27)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (/home/senadar1/apps/canvas/server.js:26:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/senadar1/apps/canvas/server.js',
+    '/usr/local/lsws/fcgi-bin/lsnode.js'
+  ]
+}
+
+Node.js v20.20.2
+[loginAction] Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.userActivityLog.create()` invocation:
+
+
+The table `user_activity_logs` does not exist in the current database.
+    at async g (.next/server/chunks/769.js:1:5639)
+    at async q (.next/server/app/(auth)/login/page.js:1:14893) {
+  code: 'P2021',
+  meta: { modelName: 'UserActivityLog', table: 'user_activity_logs' },
+  clientVersion: '6.19.3'
+}
+[loginAction] Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.userActivityLog.create()` invocation:
+
+
+The table `user_activity_logs` does not exist in the current database.
+    at async g (.next/server/chunks/769.js:1:5639)
+    at async q (.next/server/app/(dashboard)/page.js:1:77191) {
+  code: 'P2021',
+  meta: { modelName: 'UserActivityLog', table: 'user_activity_logs' },
+  clientVersion: '6.19.3'
+}
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+[erp_cnvs] CRITICAL ERROR: .next/standalone/server.js tidak ditemukan!
+Pastikan 'output: "standalone"' aktif di next.config.ts dan Anda telah menjalankan 'npm run build'.
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async j (.next/server/chunks/268.js:1:5401) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2740938003'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async h (.next/server/app/(dashboard)/users/page.js:1:28890)
+    at async v (.next/server/app/(dashboard)/page.js:1:56193) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2861463177'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async j (.next/server/chunks/268.js:1:5401) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2740938003'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async h (.next/server/app/(dashboard)/users/page.js:1:28890)
+    at async v (.next/server/app/(dashboard)/page.js:1:56193) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2861463177'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async j (.next/server/chunks/268.js:1:5401) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2740938003'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async h (.next/server/app/(dashboard)/users/page.js:1:28890)
+    at async v (.next/server/app/(dashboard)/page.js:1:56193) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2861463177'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async j (.next/server/chunks/268.js:1:5401) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2740938003'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async h (.next/server/app/(dashboard)/users/page.js:1:28890)
+    at async v (.next/server/app/(dashboard)/page.js:1:56193) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2861463177'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async j (.next/server/chunks/268.js:1:5401) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2740938003'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/268.js:1:502)
+    at async h (.next/server/app/(dashboard)/users/page.js:1:28890)
+    at async v (.next/server/app/(dashboard)/page.js:1:56193) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '2861463177'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:502)
+    at async j (.next/server/chunks/536.js:1:5401) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '568872915'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:502)
+    at async h (.next/server/app/(dashboard)/users/page.js:1:29843)
+    at async v (.next/server/app/(dashboard)/page.js:1:55399) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '3614040513'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:502)
+    at async j (.next/server/chunks/536.js:1:5401) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '568872915'
+}
+⨯ Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:502)
+    at async h (.next/server/app/(dashboard)/users/page.js:1:29843)
+    at async v (.next/server/app/(dashboard)/page.js:1:55399) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined,
+  digest: '3614040513'
+}
+[loginAction] First query failed, retrying... Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10058) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10217) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] First query failed, retrying... Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10058) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10217) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+[loginAction] First query failed, retrying... Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10058)
+    at async q (.next/server/app/(auth)/login/page.js:1:13851) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10217) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] First query failed, retrying... Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10058) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10217) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] First query failed, retrying... Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10058) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10217) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] First query failed, retrying... Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10058) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10217) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+Error: Server is not running.
+    at ignore-listed frames {
+  code: 'ERR_SERVER_NOT_RUNNING'
+}
+Error [PrismaClientInitializationError]: Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at ignore-listed frames {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+⨯ unhandledRejection:  Error [PrismaClientInitializationError]: Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at ignore-listed frames {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+⨯ unhandledRejection:  Error [PrismaClientInitializationError]: Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at ignore-listed frames {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] First query failed, retrying... Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10058) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10217) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] First query failed, retrying... Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10058) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+[loginAction] Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Prisma Client could not locate the Query Engine for runtime "debian-openssl-1.1.x".
+
+This happened because Prisma Client was generated for "windows", but the actual deployment required "debian-openssl-1.1.x".
+Add "debian-openssl-1.1.x" to `binaryTargets` in the "schema.prisma" file and run `prisma generate` after saving it:
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+The following locations have been searched:
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/.prisma/client
+  /home/senadar1/apps/canvas/.next/standalone/node_modules/@prisma/client
+  D:\Activity\Canvas\erp_cnvs\node_modules\@prisma\client
+  /tmp/prisma-engines
+    at async g (.next/server/chunks/536.js:1:10217) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}

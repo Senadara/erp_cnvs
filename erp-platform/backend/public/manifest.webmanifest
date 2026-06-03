@@ -1,0 +1,17 @@
+{
+  "name": "ERP Karsa Canvas",
+  "short_name": "ERP Karsa",
+  "description": "ERP outlet — Laravel PWA",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#065f46",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

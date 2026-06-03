@@ -41,3 +41,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ─── Laravel (erp-platform/backend) — terpisah dari Next ───
+/erp-platform/backend/vendor/
+/erp-platform/backend/node_modules/
+/erp-platform/backend/public/build/
+/erp-platform/backend/public/hot
+/erp-platform/backend/storage/*.key
+/erp-platform/backend/.phpunit.cache
+/erp-platform/backend/bootstrap/cache/*.php
+!/erp-platform/backend/bootstrap/cache/.gitignore
