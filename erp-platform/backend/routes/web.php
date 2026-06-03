@@ -49,7 +49,22 @@ Route::middleware(['auth', 'outlet'])->group(function () {
     // Reports (Laporan)
     Route::get('/reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports');
 
-    $modules = ['waste', 'outlets', 'owner', 'users'];
+    // Owner Dashboard
+    Route::get('/owner', [\App\Http\Controllers\OwnerController::class, 'index'])->name('owner');
+
+    // Users (Pengguna)
+    Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users');
+    Route::post('/users', [\App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{id}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
+
+    // Suppliers
+    Route::get('/suppliers', [\App\Http\Controllers\SupplierController::class, 'index'])->name('suppliers');
+    Route::post('/suppliers', [\App\Http\Controllers\SupplierController::class, 'store'])->name('suppliers.store');
+    Route::delete('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->name('suppliers.destroy');
+
+    // Remaining placeholders
+    $modules = ['waste', 'outlets'];
     foreach ($modules as $module) {
         Route::get('/'.$module, function (\Illuminate\Http\Request $request) use ($module) {
             return app(\App\Http\Controllers\ModulePageController::class)->show($request, $module);

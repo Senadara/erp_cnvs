@@ -72,6 +72,8 @@ class NavPermission
             ['href' => '/outlets', 'label' => 'Outlet', 'feature' => 'outlets'],
             ['href' => '/owner', 'label' => 'Owner', 'feature' => 'owner'],
             ['href' => '/users', 'label' => 'Pengguna', 'feature' => 'users'],
+            ['href' => '/suppliers', 'label' => 'Supplier', 'feature' => 'suppliers'],
+            ['href' => '/shifts', 'label' => 'Shift', 'feature' => 'cashier'],
         ];
     }
 
