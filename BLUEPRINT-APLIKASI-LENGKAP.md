@@ -25,7 +25,7 @@ Dokumen ini merangkum **seluruh** cakupan aplikasi `erp_cnvs` (Next) dan rencana
 | 5 Expenses/Reports | ✅ | Pengeluaran, Laporan bulanan/harian, Owner Dashboard |
 | 6 Users/Logs | ✅ | CRUD user, mitra scopes, activity log |
 | 7 Suppliers | ✅ | CRUD supplier, nav terintegrasi |
-| 8 QA/Deploy | ⬜ | Belum |
+| 8 QA/Deploy | ✅ | `DEPLOY-LARAVEL-CPANEL.md` dan `INSTALL-PWA.md` dibuat |
 
 Repo: **satu git**, path terpisah — `.gitignore` mengabaikan `erp-platform/backend/vendor`, `node_modules`, `public/build`.
 
