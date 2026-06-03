@@ -29,7 +29,19 @@ Route::middleware(['auth', 'outlet'])->group(function () {
     Route::post('/stock/{id}/add', [\App\Http\Controllers\StockController::class, 'addStock'])->name('stock.add');
     Route::post('/stock/{id}/waste', [\App\Http\Controllers\StockController::class, 'recordWaste'])->name('stock.waste');
 
-    $modules = ['cashier', 'expenses', 'waste', 'reports', 'receipts', 'outlets', 'owner', 'users'];
+    // Cashier (Kasir)
+    Route::get('/cashier', [\App\Http\Controllers\CashierController::class, 'index'])->name('cashier');
+    Route::post('/cashier', [\App\Http\Controllers\CashierController::class, 'store'])->name('cashier.store');
+
+    // Transactions (Struk / Receipts)
+    Route::get('/receipts', [\App\Http\Controllers\TransactionController::class, 'index'])->name('receipts');
+
+    // Shifts
+    Route::get('/shifts', [\App\Http\Controllers\ShiftController::class, 'index'])->name('shifts');
+    Route::post('/shifts/open', [\App\Http\Controllers\ShiftController::class, 'store'])->name('shifts.store');
+    Route::post('/shifts/{id}/close', [\App\Http\Controllers\ShiftController::class, 'update'])->name('shifts.update');
+
+    $modules = ['expenses', 'waste', 'reports', 'outlets', 'owner', 'users'];
     foreach ($modules as $module) {
         Route::get('/'.$module, function (\Illuminate\Http\Request $request) use ($module) {
             return app(\App\Http\Controllers\ModulePageController::class)->show($request, $module);
