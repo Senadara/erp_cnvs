@@ -63,13 +63,14 @@ Route::middleware(['auth', 'outlet'])->group(function () {
     Route::post('/suppliers', [\App\Http\Controllers\SupplierController::class, 'store'])->name('suppliers.store');
     Route::delete('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->name('suppliers.destroy');
 
-    // Remaining placeholders
-    $modules = ['waste', 'outlets'];
-    foreach ($modules as $module) {
-        Route::get('/'.$module, function (\Illuminate\Http\Request $request) use ($module) {
-            return app(\App\Http\Controllers\ModulePageController::class)->show($request, $module);
-        })->name($module);
-    }
+    // Waste
+    Route::get('/waste', [\App\Http\Controllers\WasteController::class, 'index'])->name('waste');
+    Route::post('/waste', [\App\Http\Controllers\WasteController::class, 'store'])->name('waste.store');
+
+    // Outlets
+    Route::get('/outlets', [\App\Http\Controllers\OutletController::class, 'index'])->name('outlets');
+    Route::post('/outlets', [\App\Http\Controllers\OutletController::class, 'store'])->name('outlets.store');
+    Route::delete('/outlets/{id}', [\App\Http\Controllers\OutletController::class, 'destroy'])->name('outlets.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

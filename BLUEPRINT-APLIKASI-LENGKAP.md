@@ -20,9 +20,12 @@ Dokumen ini merangkum **seluruh** cakupan aplikasi `erp_cnvs` (Next) dan rencana
 | 0 Scaffold | ✅ | Laravel 12 + Breeze Inertia React |
 | 1 Auth + shell | ✅ | Login, `ErpLayout`, nav role, outlet session, dashboard stats |
 | 2 Migrasi parity | ✅ | Tabel inti ERP + `ErpSeeder` owner |
-| 3 Modul bisnis | ⏳ | Halaman placeholder per modul |
+| 3 Modul bisnis | ✅ | Kasir (POS), Shift, Transaksi, Struk — beta operasional web |
 | 4 PWA | 🟡 | manifest + SW dasar; sync offline belum |
-| 5+ DSS / Expo | ⬜ | Belum |
+| 5 Expenses/Reports | ✅ | Pengeluaran, Laporan bulanan/harian, Owner Dashboard |
+| 6 Users/Logs | ✅ | CRUD user, mitra scopes, activity log |
+| 7 Suppliers | ✅ | CRUD supplier, nav terintegrasi |
+| 8 QA/Deploy | ⬜ | Belum |
 
 Repo: **satu git**, path terpisah — `.gitignore` mengabaikan `erp-platform/backend/vendor`, `node_modules`, `public/build`.
 
