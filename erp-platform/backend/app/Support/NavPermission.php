@@ -57,23 +57,23 @@ class NavPermission
         return self::STAFF_DEFAULT[$feature] ?? false;
     }
 
-    /** @return list<array{href: string, label: string, feature: string}> */
+    /** @return list<array{href: string, label: string, feature: string, icon: string, group: string}> */
     public static function navItems(): array
     {
         return [
-            ['href' => '/dashboard', 'label' => 'Dashboard', 'feature' => 'dashboard'],
-            ['href' => '/cashier', 'label' => 'Kasir', 'feature' => 'cashier'],
-            ['href' => '/products', 'label' => 'Produk', 'feature' => 'products'],
-            ['href' => '/stock', 'label' => 'Stok', 'feature' => 'stock'],
-            ['href' => '/expenses', 'label' => 'Keuangan Shift', 'feature' => 'expenses'],
-            ['href' => '/waste', 'label' => 'Waste', 'feature' => 'waste'],
-            ['href' => '/reports', 'label' => 'Laporan', 'feature' => 'reports'],
-            ['href' => '/receipts', 'label' => 'Struk', 'feature' => 'receipts'],
-            ['href' => '/outlets', 'label' => 'Outlet', 'feature' => 'outlets'],
-            ['href' => '/owner', 'label' => 'Owner', 'feature' => 'owner'],
-            ['href' => '/users', 'label' => 'Pengguna', 'feature' => 'users'],
-            ['href' => '/suppliers', 'label' => 'Supplier', 'feature' => 'suppliers'],
-            ['href' => '/shifts', 'label' => 'Shift', 'feature' => 'cashier'],
+            ['href' => '/dashboard', 'label' => 'Dashboard', 'feature' => 'dashboard', 'icon' => 'home', 'group' => 'main'],
+            ['href' => '/cashier', 'label' => 'Kasir', 'feature' => 'cashier', 'icon' => 'calculator', 'group' => 'operasional'],
+            ['href' => '/shifts', 'label' => 'Shift', 'feature' => 'cashier', 'icon' => 'clock', 'group' => 'operasional'],
+            ['href' => '/receipts', 'label' => 'Struk', 'feature' => 'receipts', 'icon' => 'receipt', 'group' => 'operasional'],
+            ['href' => '/products', 'label' => 'Produk', 'feature' => 'products', 'icon' => 'cube', 'group' => 'inventaris'],
+            ['href' => '/stock', 'label' => 'Stok', 'feature' => 'stock', 'icon' => 'archive', 'group' => 'inventaris'],
+            ['href' => '/waste', 'label' => 'Waste', 'feature' => 'waste', 'icon' => 'trash', 'group' => 'inventaris'],
+            ['href' => '/suppliers', 'label' => 'Supplier', 'feature' => 'suppliers', 'icon' => 'truck', 'group' => 'inventaris'],
+            ['href' => '/expenses', 'label' => 'Pengeluaran', 'feature' => 'expenses', 'icon' => 'banknotes', 'group' => 'keuangan'],
+            ['href' => '/reports', 'label' => 'Laporan', 'feature' => 'reports', 'icon' => 'chart', 'group' => 'keuangan'],
+            ['href' => '/owner', 'label' => 'Owner', 'feature' => 'owner', 'icon' => 'building', 'group' => 'keuangan'],
+            ['href' => '/outlets', 'label' => 'Outlet', 'feature' => 'outlets', 'icon' => 'map', 'group' => 'pengaturan'],
+            ['href' => '/users', 'label' => 'Pengguna', 'feature' => 'users', 'icon' => 'users', 'group' => 'pengaturan'],
         ];
     }
 
